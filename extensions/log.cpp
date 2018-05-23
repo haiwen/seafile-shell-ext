@@ -15,7 +15,7 @@ std::string getLogPath()
     if (home.empty())
         return "";
 
-    return home + "/seaf_ext.log";
+    return home + "/seafile_ext.log";
 }
 
 

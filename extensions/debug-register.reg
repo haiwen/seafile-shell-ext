@@ -8,7 +8,7 @@ Windows Registry Editor Version 5.00
 @="SeafileExt"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-C0381E6AE606}\InProcServer32]
-@="F:\\dev\\seafile_shell_ext64.dll"
+@="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
 [HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\SeafileExt]
