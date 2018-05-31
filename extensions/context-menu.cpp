@@ -19,9 +19,9 @@ bool shouldIgnorePath(const std::string& path)
     }
 
     /* Ignore flash disk, network mounted drive, etc. */
-    if (GetDriveType(path.substr(0, 3).c_str()) != DRIVE_FIXED) {
-        return TRUE;
-    }
+    // if (GetDriveType(path.substr(0, 3).c_str()) != DRIVE_FIXED) {
+    //     return TRUE;
+    // }
 
     return FALSE;
 }
@@ -193,27 +193,31 @@ STDMETHODIMP ShellExt::InvokeCommand_Wrap(LPCMINVOKECOMMANDINFO info)
 
     MenuOp op = active_menu_items_[id];
 
+    // TODO: we need to decide to send the command to seafile or seadrive
     if (op == GetShareLink) {
         seafile::GetShareLinkCommand cmd(path_);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == GetInternalLink) {
         seafile::GetInternalLinkCommand cmd(path_);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == LockFile) {
         seafile::LockFileCommand cmd(path_);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == UnlockFile) {
         seafile::UnlockFileCommand cmd(path_);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == ShareToUser) {
         seafile::PrivateShareCommand cmd(path_, false);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == ShareToGroup) {
         seafile::PrivateShareCommand cmd(path_, true);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
     } else if (op == ShowHistory) {
         seafile::ShowHistoryCommand cmd(path_);
-        cmd.send();
+        cmd.send(is_seadrive_menu_);
+    } else if (op == Download) {
+        seafile::DownloadCommand cmd(path_);
+        cmd.send(is_seadrive_menu_);
     }
 
     return S_OK;
@@ -324,9 +328,14 @@ void ShellExt::insertSubMenuItem(const std::string& text, MenuOp op)
 void ShellExt::buildSubMenu(const seafile::RepoInfo& repo,
                             const std::string& path_in_repo)
 {
+    is_seadrive_menu_ = repo.is_seadrive;
+    if (repo.is_seadrive) {
+        insertSubMenuItem(SEAFILE_TR("download"), Download);
+    }
     insertSubMenuItem(SEAFILE_TR("get seafile download link"), GetShareLink);
     insertSubMenuItem(SEAFILE_TR("get seafile internal link"), GetInternalLink);
 
+    // FIXME: seadrive client doens't support private share dialog yet.
     std::unique_ptr<wchar_t[]> path_w(utils::utf8ToWString(path_));
     bool is_dir = GetFileAttributesW(path_w.get()) & FILE_ATTRIBUTE_DIRECTORY;
     if (repo.support_private_share && is_dir) {

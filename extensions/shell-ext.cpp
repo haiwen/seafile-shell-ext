@@ -12,7 +12,7 @@ namespace utils = seafile::utils;
 
 namespace {
 
-const int kWorktreeCacheExpireMSecs = 3 * 1000;
+const int kWorktreeCacheExpireMSecs = 7 * 1000;
 
 } // namespace
 
@@ -132,7 +132,9 @@ bool ShellExt::pathInRepo(const std::string& path,
             if (p.size() > wt.size() && p[wt.size()] != '/') {
                 continue;
             }
-            *path_in_repo = p.substr(wt.size(), p.size() - wt.size());
+            if (path_in_repo) {
+                *path_in_repo = p.substr(wt.size(), p.size() - wt.size());
+            }
             if (repo) {
                 *repo = repos[i];
             }

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "commands.h"
+#include "repo-info.h"
 #include "ext-utils.h"
 
 extern  volatile LONG       g_cRefThisDll;          // Reference count of this DLL.
@@ -73,6 +73,7 @@ private:
         ShareToUser,
         ShareToGroup,
         ShowHistory,
+        Download,
     };
 
     void buildSubMenu(const seafile::RepoInfo& repo,
@@ -106,6 +107,7 @@ private:
     UINT next_active_item_;
 
     std::vector<MenuOp> active_menu_items_;
+    bool is_seadrive_menu_;
 };
 
 #endif // SEAFILE_EXT_SHELL_EXT_H

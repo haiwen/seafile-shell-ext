@@ -36,7 +36,7 @@ std::string toString(RepoInfo::Status st) {
 
 
 GetShareLinkCommand::GetShareLinkCommand(const std::string path)
-    : AppletCommand<void>("get-share-link"),
+    : SimpleAppletCommand("get-share-link"),
       path_(path)
 {
 }
@@ -47,7 +47,7 @@ std::string GetShareLinkCommand::serialize()
 }
 
 GetInternalLinkCommand::GetInternalLinkCommand(const std::string path)
-    : AppletCommand<void>("get-internal-link"),
+    : SimpleAppletCommand("get-internal-link"),
       path_(path)
 {
 }
@@ -69,7 +69,12 @@ std::string ListReposCommand::serialize()
     return buf;
 }
 
-bool ListReposCommand::parseResponse(const std::string& raw_resp,
+std::string ListReposCommand::serializeForDrive()
+{
+    return "";
+}
+
+bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
                                      RepoInfoList* infos)
 {
     std::vector<std::string> lines = utils::split(raw_resp, '\n');
@@ -120,6 +125,30 @@ bool ListReposCommand::parseResponse(const std::string& raw_resp,
     return true;
 }
 
+bool ListReposCommand::parseDriveResponse(const std::string& raw_resp,
+                                          RepoInfoList* infos)
+{
+    std::vector<std::string> lines = utils::split(raw_resp, '\n');
+    if (lines.empty()) {
+        return true;
+    }
+    for (size_t i = 0; i < lines.size(); i++) {
+        std::string line = lines[i];
+        std::string repo_dir = utils::normalizedPath(line);
+        // seaf_ext_log ("repo dir: %s\n", repo_dir.c_str());
+        infos->push_back(RepoInfo(repo_dir));
+    }
+    return true;
+}
+
+void ListReposCommand::mergeResponse(RepoInfoList *resp,
+                                     const RepoInfoList &appletResp,
+                                     const RepoInfoList &driveResp)
+{
+    resp->insert(resp->end(), appletResp.begin(), appletResp.end());
+    resp->insert(resp->end(), driveResp.begin(), driveResp.end());
+}
+
 GetFileStatusCommand::GetFileStatusCommand(const std::string& repo_id,
                                            const std::string& path_in_repo,
                                            bool isdir)
@@ -138,7 +167,7 @@ std::string GetFileStatusCommand::serialize()
     return buf;
 }
 
-bool GetFileStatusCommand::parseResponse(const std::string& raw_resp,
+bool GetFileStatusCommand::parseAppletResponse(const std::string& raw_resp,
                                          RepoInfo::Status *status)
 {
     // seaf_ext_log ("raw_resp is %s\n", raw_resp.c_str());
@@ -170,8 +199,15 @@ bool GetFileStatusCommand::parseResponse(const std::string& raw_resp,
     return true;
 }
 
+void GetFileStatusCommand::mergeResponse(RepoInfo::Status *resp,
+                                         const RepoInfo::Status &appletResp,
+                                         const RepoInfo::Status &driveResp)
+{
+    *resp = appletResp != RepoInfo::NoStatus ? appletResp : driveResp;
+}
+
 LockFileCommand::LockFileCommand(const std::string& path)
-    : AppletCommand<void>("lock-file"),
+    : SimpleAppletCommand("lock-file"),
     path_(path)
 {
 }
@@ -182,7 +218,7 @@ std::string LockFileCommand::serialize()
 }
 
 UnlockFileCommand::UnlockFileCommand(const std::string& path)
-    : AppletCommand<void>("unlock-file"),
+    : SimpleAppletCommand("unlock-file"),
     path_(path)
 {
 }
@@ -193,7 +229,7 @@ std::string UnlockFileCommand::serialize()
 }
 
 PrivateShareCommand::PrivateShareCommand(const std::string& path, bool to_group)
-    : AppletCommand<void>(to_group ? "private-share-to-group"
+    : SimpleAppletCommand(to_group ? "private-share-to-group"
                                    : "private-share-to-user"),
       path_(path)
 {
@@ -205,12 +241,23 @@ std::string PrivateShareCommand::serialize()
 }
 
 ShowHistoryCommand::ShowHistoryCommand(const std::string& path)
-    : AppletCommand<void>("show-history"),
+    : SimpleAppletCommand("show-history"),
       path_(path)
 {
 }
 
 std::string ShowHistoryCommand::serialize()
+{
+    return path_;
+}
+
+DownloadCommand::DownloadCommand(const std::string path)
+    : SimpleAppletCommand("download"),
+      path_(path)
+{
+}
+
+std::string DownloadCommand::serialize()
 {
     return path_;
 }

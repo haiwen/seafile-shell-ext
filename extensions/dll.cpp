@@ -1,7 +1,6 @@
 
 #include "ext-common.h"
 #include "class-factory.h"
-#include "applet-connection.h"
 #include "guids.h"
 #include "log.h"
 #include "ext-utils.h"
@@ -27,7 +26,6 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReserved */)
 
         // Extension DLL one-time initialization
         g_hmodThisDll = hInstance;
-        seafile::AppletConnection::instance()->prepare();
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {

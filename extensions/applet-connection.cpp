@@ -10,7 +10,8 @@
 
 namespace {
 
-const char *kSeafExtPipeName = "\\\\.\\pipe\\seafile_ext_pipe";
+const char *kSeafExtPipeNameApplet = "\\\\.\\pipe\\seafile_ext_pipe";
+const char *kSeafExtPipeNameDrive = "\\\\.\\pipe\\seadrive_ext_pipe_";
 
 struct ThreadData {
     seafile::AppletConnection *conn;
@@ -30,22 +31,34 @@ DWORD WINAPI sendDataWrapper (void *vdata)
 
 namespace seafile {
 
-AppletConnection::AppletConnection()
+AppletConnection::AppletConnection(const char *pipe_name)
     : connected_(false),
+      pipe_name_(pipe_name),
       pipe_(INVALID_HANDLE_VALUE),
       last_conn_failure_(0)
 {
 }
 
-AppletConnection *AppletConnection::singleton_;
+AppletConnection *AppletConnection::applet_singleton_;
+AppletConnection *AppletConnection::drive_singleton_;
 
-AppletConnection *AppletConnection::instance()
+AppletConnection *AppletConnection::appletInstance()
 {
-    if (!singleton_) {
-        static AppletConnection v;
-        singleton_ = &v;
+    if (!applet_singleton_) {
+        static AppletConnection v(kSeafExtPipeNameApplet);
+        applet_singleton_ = &v;
     }
-    return singleton_;
+    return applet_singleton_;
+}
+
+AppletConnection *AppletConnection::driveInstance()
+{
+    if (!drive_singleton_) {
+        static std::string local_pipe_name = utils::getLocalPipeName(kSeafExtPipeNameDrive);
+        static AppletConnection v(local_pipe_name.c_str());
+        drive_singleton_ = &v;
+    }
+    return drive_singleton_;
 }
 
 
@@ -56,7 +69,7 @@ AppletConnection::connect ()
         CloseHandle (pipe_);
     }
     pipe_ = CreateFile(
-        kSeafExtPipeName,       // pipe name
+        pipe_name_,       // pipe name
         GENERIC_READ |          // read and write access
         GENERIC_WRITE,
         0,                      // no sharing
@@ -85,22 +98,6 @@ AppletConnection::connect ()
     connected_ = true;
     return true;
 }
-
-bool
-AppletConnection::prepare()
-{
-    // HANDLE h_ev = CreateEvent
-    //     (NULL,                  /* security attribute */
-    //      FALSE,                 /* manual reset */
-    //      FALSE,                 /* initial state  */
-    //      NULL);                 /* event name */
-
-    // if (!h_ev) {
-    //     return false;
-    // }
-    return true;
-}
-
 
 bool AppletConnection::sendCommand(const std::string& cmd)
 {

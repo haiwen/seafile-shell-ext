@@ -4,92 +4,54 @@
 #include <string>
 #include <vector>
 
+#include "log.h"
+#include "repo-info.h"
 #include "applet-connection.h"
 
-namespace seafile {
-class RepoInfo
+namespace seafile
 {
-public:
-    enum Status {
-        NoStatus = 0,
-        Paused,
-        Normal,
-        Syncing,
-        Error,
-        LockedByMe,
-        LockedByOthers,
-        ReadOnly,
-        N_Status,
-    };
-
-    std::string repo_id;
-    std::string repo_name;
-    std::string worktree;
-    Status status;
-    bool support_file_lock;
-    bool support_private_share;
-
-    RepoInfo() : status(NoStatus)
-    {
-    }
-
-    RepoInfo(const std::string& repo_id,
-             const std::string repo_name,
-             const std::string& worktree,
-             Status status,
-             bool support_file_lock,
-             bool support_private_share)
-        : repo_id(repo_id),
-          repo_name(repo_name),
-          worktree(worktree),
-          status(status),
-          support_file_lock(support_file_lock),
-          support_private_share(support_private_share)
-    {
-    }
-
-    bool isValid()
-    {
-        return !repo_id.empty();
-    }
-};
-
-std::string toString(RepoInfo::Status st);
-
-typedef std::vector<RepoInfo> RepoInfoList;
 
 /**
- * Abstract base class for all commands sent to seafile applet.
+ * Abstract base class for all one-way commands, e.g. don't require a response
+ * from seafile/seadrive client.
  */
-template<class T>
-class AppletCommand {
+class SimpleAppletCommand
+{
 public:
-    AppletCommand(std::string name) : name_(name) {}
+    SimpleAppletCommand(std::string name) : name_(name)
+    {
+    }
 
     /**
      * send the command to seafile client, don't need the response
      */
-    void send()
+    void send(bool is_seadrive_command)
     {
-        AppletConnection::instance()->sendCommand(formatRequest());
+        if (is_seadrive_command) {
+            AppletConnection::driveInstance()->sendCommand(formatDriveRequest());
+        } else {
+            AppletConnection::appletInstance()->sendCommand(formatRequest());
+        }
     }
 
     std::string formatRequest()
     {
-        return name_ + "\t" + serialize();
+        std::string body = serialize();
+        if (body.empty()) {
+            return name_;
+        } else {
+            return name_ + "\t" + body;
+        }
     }
 
-    /**
-     * send the command to seafile client, and wait for the response
-     */
-    bool sendAndWait(T *resp)
+    std::string formatDriveRequest()
     {
-        std::string raw_resp;
-        if (!AppletConnection::instance()->sendCommandAndWait(formatRequest(), &raw_resp)) {
-            return false;
+        std::string body = serializeForDrive();
+        if (body.empty()) {
+            return name_;
+        } else {
+            return name_ + "\t" + body;
         }
-
-        return parseResponse(raw_resp, resp);
     }
 
 protected:
@@ -97,23 +59,93 @@ protected:
      * Prepare this command for sending through the pipe
      */
     virtual std::string serialize() = 0;
+    virtual std::string serializeForDrive()
+    {
+        return serialize();
+    }
+
+    std::string name_;
+};
+
+
+/**
+ * Abstract base class for all commands that also requires response from
+ * seafile/seadrive client.
+ */
+template <class T>
+class AppletCommand : public SimpleAppletCommand
+{
+public:
+    AppletCommand(std::string name) : SimpleAppletCommand(name)
+    {
+    }
+
+    /**
+     * send the command to seafile client & seadrive client, and wait for the
+     * response, then merge the response
+     */
+    bool sendAndWait(T *resp)
+    {
+        std::string raw_resp;
+        T appletResp;
+        T driveResp;
+
+        bool appletSuccess =
+            AppletConnection::appletInstance()->sendCommandAndWait(
+                formatRequest(), &raw_resp);
+        if (appletSuccess) {
+            appletSuccess = parseAppletResponse(raw_resp, &appletResp);
+        }
+        bool driveSuccess =
+            AppletConnection::driveInstance()->sendCommandAndWait(
+                formatDriveRequest(), &raw_resp);
+        if (driveSuccess) {
+            driveSuccess = parseDriveResponse(raw_resp, &driveResp);
+        }
+        if (appletSuccess && driveSuccess) {
+            mergeResponse(resp, appletResp, driveResp);
+            return true;
+        } else if (appletSuccess) {
+            *resp = appletResp;
+            return true;
+        } else if (driveSuccess) {
+            *resp = driveResp;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+protected:
+    virtual std::string serialize() = 0;
+    virtual std::string serializeForDrive()
+    {
+        return serialize();
+    }
 
     /**
      * Parse response from seafile applet. Commands that don't need the
      * respnse can inherit the implementation of the base class, which does
      * nothing.
      */
-    virtual bool parseResponse(const std::string& raw_resp, T *resp)
+    virtual bool parseAppletResponse(const std::string &raw_resp, T *resp)
     {
         return true;
     }
 
-private:
-    std::string name_;
+    virtual bool parseDriveResponse(const std::string &raw_resp, T *resp)
+    {
+        return true;
+    }
+
+    virtual void mergeResponse(T *resp, const T &appletResp, const T &driveResp)
+    {
+    }
 };
 
 
-class GetShareLinkCommand : public AppletCommand<void> {
+class GetShareLinkCommand : public SimpleAppletCommand
+{
 public:
     GetShareLinkCommand(const std::string path);
 
@@ -124,7 +156,8 @@ private:
     std::string path_;
 };
 
-class GetInternalLinkCommand : public AppletCommand<void> {
+class GetInternalLinkCommand : public SimpleAppletCommand
+{
 public:
     GetInternalLinkCommand(const std::string path);
 
@@ -136,34 +169,10 @@ private:
 };
 
 
-class ListReposCommand : public AppletCommand<RepoInfoList> {
+class LockFileCommand : public SimpleAppletCommand
+{
 public:
-    ListReposCommand();
-
-protected:
-    std::string serialize();
-
-    bool parseResponse(const std::string& raw_resp, RepoInfoList *worktrees);
-};
-
-class GetFileStatusCommand : public AppletCommand<RepoInfo::Status> {
-public:
-    GetFileStatusCommand(const std::string& repo_id, const std::string& path_in_repo, bool isdir);
-
-protected:
-    std::string serialize();
-
-    bool parseResponse(const std::string& raw_resp, RepoInfo::Status *status);
-
-private:
-    std::string repo_id_;
-    std::string path_in_repo_;
-    bool isdir_;
-};
-
-class LockFileCommand : public AppletCommand<void> {
-public:
-    LockFileCommand(const std::string& path);
+    LockFileCommand(const std::string &path);
 
 protected:
     std::string serialize();
@@ -172,9 +181,10 @@ private:
     std::string path_;
 };
 
-class UnlockFileCommand : public AppletCommand<void> {
+class UnlockFileCommand : public SimpleAppletCommand
+{
 public:
-    UnlockFileCommand(const std::string& path);
+    UnlockFileCommand(const std::string &path);
 
 protected:
     std::string serialize();
@@ -183,9 +193,10 @@ private:
     std::string path_;
 };
 
-class PrivateShareCommand : public AppletCommand<void> {
+class PrivateShareCommand : public SimpleAppletCommand
+{
 public:
-    PrivateShareCommand(const std::string& path, bool to_group);
+    PrivateShareCommand(const std::string &path, bool to_group);
 
 protected:
     std::string serialize();
@@ -195,9 +206,62 @@ private:
     bool to_group;
 };
 
-class ShowHistoryCommand : public AppletCommand<void> {
+class ShowHistoryCommand : public SimpleAppletCommand
+{
 public:
-    ShowHistoryCommand(const std::string& path);
+    ShowHistoryCommand(const std::string &path);
+
+protected:
+    std::string serialize();
+
+private:
+    std::string path_;
+};
+
+
+class ListReposCommand : public AppletCommand<RepoInfoList>
+{
+public:
+    ListReposCommand();
+
+protected:
+    std::string serialize();
+    std::string serializeForDrive();
+
+    bool parseAppletResponse(const std::string &raw_resp,
+                             RepoInfoList *worktrees);
+    bool parseDriveResponse(const std::string &raw_resp,
+                            RepoInfoList *worktrees);
+    void mergeResponse(RepoInfoList *resp,
+                       const RepoInfoList &appletResp,
+                       const RepoInfoList &driveResp);
+};
+
+class GetFileStatusCommand : public AppletCommand<RepoInfo::Status>
+{
+public:
+    GetFileStatusCommand(const std::string &repo_id,
+                         const std::string &path_in_repo,
+                         bool isdir);
+
+protected:
+    std::string serialize();
+
+    bool parseAppletResponse(const std::string &raw_resp,
+                             RepoInfo::Status *status);
+    void mergeResponse(RepoInfo::Status *resp,
+                       const RepoInfo::Status &appletResp,
+                       const RepoInfo::Status &driveResp);
+
+private:
+    std::string repo_id_;
+    std::string path_in_repo_;
+    bool isdir_;
+};
+
+class DownloadCommand : public SimpleAppletCommand {
+public:
+    DownloadCommand(const std::string path);
 
 protected:
     std::string serialize();

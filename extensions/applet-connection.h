@@ -14,9 +14,9 @@ namespace seafile {
  */
 class AppletConnection {
 public:
-    static AppletConnection *instance();
+    static AppletConnection *appletInstance();
+    static AppletConnection *driveInstance();
 
-    bool prepare();
     bool connect();
 
     /**
@@ -30,7 +30,7 @@ public:
     bool sendCommandAndWait(const std::string& data, std::string *resp);
 
 private:
-    AppletConnection();
+    AppletConnection(const char* pipe_name);
     bool readResponse(std::string *out);
     bool writeRequest(const std::string& cmd);
     void onPipeError();
@@ -42,9 +42,11 @@ private:
      */
     bool sendWithReconnect(const std::string& cmd);
 
-    static AppletConnection *singleton_;
+    static AppletConnection *applet_singleton_;
+    static AppletConnection *drive_singleton_;
 
     bool connected_;
+    const char *pipe_name_;
     HANDLE pipe_;
 
     uint64_t last_conn_failure_;

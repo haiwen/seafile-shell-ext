@@ -2,7 +2,7 @@
 #include "ext-utils.h"
 #include "shell-ext.h"
 #include "log.h"
-#include "commands.h"
+#include "repo-info.h"
 
 #include <string>
 
