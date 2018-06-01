@@ -64,6 +64,14 @@ protected:
         return serialize();
     }
 
+    virtual bool shouldSendToApplet() {
+        return true;
+    }
+
+    virtual bool shouldSendToDrive() {
+        return true;
+    }
+
     std::string name_;
 };
 
@@ -89,18 +97,23 @@ public:
         std::string raw_resp;
         T appletResp;
         T driveResp;
-
-        bool appletSuccess =
-            AppletConnection::appletInstance()->sendCommandAndWait(
-                formatRequest(), &raw_resp);
-        if (appletSuccess) {
+        bool appletSuccess = false;
+        bool driveSuccess = false;
+        if (shouldSendToApplet()) {
+            appletSuccess =
+                AppletConnection::appletInstance()->sendCommandAndWait(
+                    formatRequest(), &raw_resp);
+            if (appletSuccess) {
             appletSuccess = parseAppletResponse(raw_resp, &appletResp);
+            }
         }
-        bool driveSuccess =
-            AppletConnection::driveInstance()->sendCommandAndWait(
-                formatDriveRequest(), &raw_resp);
-        if (driveSuccess) {
-            driveSuccess = parseDriveResponse(raw_resp, &driveResp);
+        if (shouldSendToDrive()) {
+            driveSuccess =
+                AppletConnection::driveInstance()->sendCommandAndWait(
+                    formatDriveRequest(), &raw_resp);
+            if (driveSuccess) {
+                driveSuccess = parseDriveResponse(raw_resp, &driveResp);
+            }
         }
         if (appletSuccess && driveSuccess) {
             mergeResponse(resp, appletResp, driveResp);
@@ -130,16 +143,24 @@ protected:
      */
     virtual bool parseAppletResponse(const std::string &raw_resp, T *resp)
     {
-        return true;
+        return false;
     }
 
     virtual bool parseDriveResponse(const std::string &raw_resp, T *resp)
     {
-        return true;
+        return false;
     }
 
     virtual void mergeResponse(T *resp, const T &appletResp, const T &driveResp)
     {
+    }
+
+    virtual bool shouldSendToApplet() {
+        return true;
+    }
+
+    virtual bool shouldSendToDrive() {
+        return true;
     }
 };
 
@@ -237,23 +258,30 @@ protected:
                        const RepoInfoList &driveResp);
 };
 
-class GetFileStatusCommand : public AppletCommand<RepoInfo::Status>
+class GetSyncStatusCommand : public AppletCommand<SyncStatus>
 {
 public:
-    GetFileStatusCommand(const std::string &repo_id,
+    GetSyncStatusCommand(const std::string& path,
+                         const std::string &repo_id,
                          const std::string &path_in_repo,
                          bool isdir);
 
 protected:
     std::string serialize();
+    std::string serializeForDrive();
+    bool shouldSendToDrive() { return repo_id_.empty(); }
+    bool shouldSendToApplet() { return !shouldSendToDrive(); }
 
     bool parseAppletResponse(const std::string &raw_resp,
-                             RepoInfo::Status *status);
-    void mergeResponse(RepoInfo::Status *resp,
-                       const RepoInfo::Status &appletResp,
-                       const RepoInfo::Status &driveResp);
+                             SyncStatus *status);
+    bool parseDriveResponse(const std::string &raw_resp,
+                            SyncStatus *status);
+    void mergeResponse(SyncStatus *resp,
+                       const SyncStatus &appletResp,
+                       const SyncStatus &driveResp);
 
 private:
+    std::string path_;
     std::string repo_id_;
     std::string path_in_repo_;
     bool isdir_;

@@ -10,31 +10,6 @@ namespace seafile {
 
 uint64_t reposInfoTimestamp = 0;
 
-std::string toString(RepoInfo::Status st) {
-    switch (st) {
-    case RepoInfo::NoStatus:
-        return "nostatus";
-    case RepoInfo::Paused:
-        return "paused";
-    case RepoInfo::Normal:
-        return "synced";
-    case RepoInfo::Syncing:
-        return "syncing";
-    case RepoInfo::Error:
-        return "error";
-    case RepoInfo::ReadOnly:
-        return "readonly";
-    case RepoInfo::LockedByMe:
-        return "locked by me";
-    case RepoInfo::LockedByOthers:
-        return "locked by someone else";
-    case RepoInfo::N_Status:
-        return "";
-    }
-    return "";
-}
-
-
 GetShareLinkCommand::GetShareLinkCommand(const std::string path)
     : SimpleAppletCommand("get-share-link"),
       path_(path)
@@ -88,7 +63,7 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
             continue;
         }
         std::string repo_id, repo_name, worktree, status;
-        RepoInfo::Status st;
+        SyncStatus st;
         bool support_file_lock;
         bool support_private_share;
 
@@ -99,16 +74,16 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         support_file_lock = parts[4] == "file-lock-supported";
         support_private_share = parts[5] == "private-share-supported";
         if (status == "paused") {
-            st = RepoInfo::Paused;
+            st = Paused;
         }
         else if (status == "syncing") {
-            st = RepoInfo::Syncing;
+            st = Syncing;
         }
         else if (status == "error") {
-            st = RepoInfo::Error;
+            st = Error;
         }
         else if (status == "normal") {
-            st = RepoInfo::Normal;
+            st = Synced;
         }
         else {
             // impossible
@@ -149,17 +124,19 @@ void ListReposCommand::mergeResponse(RepoInfoList *resp,
     resp->insert(resp->end(), driveResp.begin(), driveResp.end());
 }
 
-GetFileStatusCommand::GetFileStatusCommand(const std::string& repo_id,
+GetSyncStatusCommand::GetSyncStatusCommand(const std::string& path,
+                                           const std::string& repo_id,
                                            const std::string& path_in_repo,
                                            bool isdir)
-    : AppletCommand<RepoInfo::Status>("get-file-status"),
+    : AppletCommand<SyncStatus>("get-file-status"),
+    path_(path),
     repo_id_(repo_id),
     path_in_repo_(path_in_repo),
     isdir_(isdir)
 {
 }
 
-std::string GetFileStatusCommand::serialize()
+std::string GetSyncStatusCommand::serialize()
 {
     char buf[512];
     snprintf (buf, sizeof(buf), "%s\t%s\t%s",
@@ -167,43 +144,57 @@ std::string GetFileStatusCommand::serialize()
     return buf;
 }
 
-bool GetFileStatusCommand::parseAppletResponse(const std::string& raw_resp,
-                                         RepoInfo::Status *status)
+std::string GetSyncStatusCommand::serializeForDrive()
+{
+    return path_;
+}
+
+bool GetSyncStatusCommand::parseAppletResponse(const std::string& raw_resp,
+                                               SyncStatus *status)
 {
     // seaf_ext_log ("raw_resp is %s\n", raw_resp.c_str());
-
     if (raw_resp == "syncing") {
-        *status = RepoInfo::Syncing;
-    } else if (raw_resp == "synced") {
-        *status = RepoInfo::Normal;
+        *status = Syncing;
     } else if (raw_resp == "error") {
-        *status = RepoInfo::Error;
-    } else if (raw_resp == "paused") {
-        *status = RepoInfo::Paused;
+        *status = Error;
+    } else if (raw_resp == "synced") {
+        *status = Synced;
+    } else if (raw_resp == "partial_synced") {
+        *status = PartialSynced;
+    } else if (raw_resp == "cloud") {
+        *status = Cloud;
     } else if (raw_resp == "readonly") {
-        *status = RepoInfo::ReadOnly;
+        *status = ReadOnly;
     } else if (raw_resp == "locked") {
-        *status = RepoInfo::LockedByOthers;
+        *status = LockedByOthers;
     } else if (raw_resp == "locked_by_me") {
-        *status = RepoInfo::LockedByMe;
+        *status = LockedByMe;
+    } else if (raw_resp == "paused") {
+        *status = Paused;
     } else if (raw_resp == "ignored") {
-        *status = RepoInfo::NoStatus;
+        *status = NoStatus;
     } else {
-        *status = RepoInfo::NoStatus;
+        *status = NoStatus;
 
-        // seaf_ext_log ("[GetFileStatusCommand] status for %s is %s, raw_resp is %s\n",
-        //               path_in_repo_.c_str(),
+        // seaf_ext_log ("[GetStatusCommand] status for %s is %s, raw_resp is %s\n",
+        //               path_.c_str(),
         //               seafile::toString(*status).c_str(), raw_resp.c_str());
     }
 
     return true;
 }
 
-void GetFileStatusCommand::mergeResponse(RepoInfo::Status *resp,
-                                         const RepoInfo::Status &appletResp,
-                                         const RepoInfo::Status &driveResp)
+bool GetSyncStatusCommand::parseDriveResponse(const std::string& raw_resp,
+                                              SyncStatus *status)
 {
-    *resp = appletResp != RepoInfo::NoStatus ? appletResp : driveResp;
+    return parseAppletResponse(raw_resp, status);
+}
+
+void GetSyncStatusCommand::mergeResponse(SyncStatus *resp,
+                                         const SyncStatus &appletResp,
+                                         const SyncStatus &driveResp)
+{
+    *resp = appletResp != NoStatus ? appletResp : driveResp;
 }
 
 LockFileCommand::LockFileCommand(const std::string& path)

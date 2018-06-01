@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <map>
 #include "repo-info.h"
 #include "ext-utils.h"
 
@@ -36,10 +37,10 @@ protected:
     // IShellExtInit wrapper functions to catch exceptions and send crash reports
     STDMETHODIMP    Initialize_Wrap(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-    seafile::RepoInfo::Status status_;
+    seafile::SyncStatus status_;
 
 public:
-    ShellExt(seafile::RepoInfo::Status status = seafile::RepoInfo::NoStatus);
+    ShellExt(seafile::SyncStatus status = seafile::NoStatus);
     virtual ~ShellExt();
 
     // IUnknown members
@@ -64,6 +65,11 @@ public:
      // IShellExtInit methods
     STDMETHODIMP    Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
+    struct SyncStatusCacheEntry {
+        uint64_t ts;
+        seafile::SyncStatus status;
+    };
+
 private:
     enum MenuOp {
         GetShareLink,
@@ -76,7 +82,8 @@ private:
         Download,
     };
 
-    void buildSubMenu(const seafile::RepoInfo& repo,
+    void buildSubMenu(const std::string& path,
+                      const seafile::RepoInfo& repo,
                       const std::string& path_in_repo);
     MENUITEMINFO createMenuItem(const std::string& text);
     bool insertMainMenu();
@@ -87,15 +94,19 @@ private:
     bool pathInRepo(const std::string& path, std::string *path_in_repo, seafile::RepoInfo *repo=0);
     bool isRepoTopDir(const std::string& path);
     seafile::RepoInfo getRepoInfoByPath(const std::string& path);
-    seafile::RepoInfo::Status getRepoFileStatus(const std::string& repo_id,
-                                                const std::string& path_in_repo,
-                                                bool isdir);
+    seafile::SyncStatus getRepoSyncStatus(const std::string& path,
+                                          const std::string& repo_id,
+                                          const std::string& path_in_repo,
+                                          bool isdir);
     /* the file/dir current clicked on */
     std::string path_;
 
     static std::unique_ptr<seafile::RepoInfoList> repos_cache_;
     static uint64_t cache_ts_;
-    seafile::utils::Mutex repos_cache_mutex_;
+    static seafile::utils::Mutex repos_cache_mutex_;
+
+    static std::map<std::string, SyncStatusCacheEntry> sync_status_cache_;
+    static seafile::utils::Mutex sync_status_cache_mutex_;
 
     /* The main menu */
     HMENU main_menu_;

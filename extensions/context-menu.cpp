@@ -145,7 +145,7 @@ STDMETHODIMP ShellExt::QueryContextMenu_Wrap(HMENU menu,
     last_ = last_command;
     index_ = 0;
 
-    buildSubMenu(repo, path_in_repo);
+    buildSubMenu(path_, repo, path_in_repo);
 
     if (!insertMainMenu()) {
         return S_FALSE;
@@ -325,7 +325,8 @@ void ShellExt::insertSubMenuItem(const std::string& text, MenuOp op)
 }
 
 
-void ShellExt::buildSubMenu(const seafile::RepoInfo& repo,
+void ShellExt::buildSubMenu(const std::string& path,
+                            const seafile::RepoInfo& repo,
                             const std::string& path_in_repo)
 {
     is_seadrive_menu_ = repo.is_seadrive;
@@ -344,13 +345,13 @@ void ShellExt::buildSubMenu(const seafile::RepoInfo& repo,
     }
 
     if (repo.support_file_lock && !is_dir) {
-        seafile::RepoInfo::Status status =
-            getRepoFileStatus(repo.repo_id, path_in_repo, false);
+        seafile::SyncStatus status =
+            getRepoSyncStatus(path, repo.repo_id, path_in_repo, false);
 
-        if (status == seafile::RepoInfo::LockedByMe) {
+        if (status == seafile::LockedByMe) {
             insertSubMenuItem(SEAFILE_TR("unlock this file"), UnlockFile);
         }
-        else if (status != seafile::RepoInfo::LockedByOthers) {
+        else if (status != seafile::LockedByOthers) {
             insertSubMenuItem(SEAFILE_TR("lock this file"), LockFile);
         }
     }

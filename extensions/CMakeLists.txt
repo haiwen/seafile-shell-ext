@@ -33,6 +33,7 @@ SET(ext_sources
   log.cpp
   applet-connection.cpp
   commands.cpp
+  repo-info.cpp
   ext-utils.cpp
   i18n.cpp
   seafile_ext.def

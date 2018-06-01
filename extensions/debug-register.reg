@@ -25,3 +25,129 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\SeafileExt]
 @="{AD201805-4E05-4F2F-B0DE-C0381E6AE606}"
+
+# Icon Overlay IconSyncing
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE607}"="SeafileExtIconSyncing"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE607}]
+@="SeafileExtIconSyncing"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE607}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconSyncing"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE607}"
+
+# Icon Overlay IconError
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE608}"="SeafileExtIconError"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE608}]
+@="SeafileExtIconError"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE608}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconError"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE608}"
+
+# Icon Overlay IconSynced
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE609}"="SeafileExtIconSynced"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE609}]
+@="SeafileExtIconSynced"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE609}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconSynced"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE609}"
+
+# Icon Overlay IconPartialSynced
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}"="SeafileExtIconPartialSynced"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}]
+@="SeafileExtIconPartialSynced"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPartialSynced"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}"
+
+# Icon Overlay IconCloud
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}"="SeafileExtIconCloud"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}]
+@="SeafileExtIconCloud"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconCloud"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}"
+
+# Icon Overlay IconReadOnly
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60C}"="SeafileExtIconReadOnly"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60C}]
+@="SeafileExtIconReadOnly"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60C}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconReadOnly"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60C}"
+
+# Icon Overlay IconLockedByOthers
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}"="SeafileExtIconLockedByOthers"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}]
+@="SeafileExtIconLockedByOthers"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconLockedByOthers"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}"
+
+# Icon Overlay IconLockedByMe
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}"="SeafileExtIconLockedByMe"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}]
+@="SeafileExtIconLockedByMe"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconLockedByMe"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}"
+
+# Icon Overlay IconPaused
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+"{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"="SeafileExtIconPaused"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}]
+@="SeafileExtIconPaused"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}\InProcServer32]
+@="C:\\dev\\seafile_ext64.dll"
+"ThreadingModel"="Apartment"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPaused"]
+@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"

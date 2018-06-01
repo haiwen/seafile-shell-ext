@@ -62,28 +62,28 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut)
         return hr;
     }
 
-    seafile::RepoInfo::Status status = seafile::RepoInfo::NoStatus;
-    if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_NORMAL)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_NORMAL!");
-        status = seafile::RepoInfo::Normal;
-    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_SYNCING)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_SYNCING!");
-        status = seafile::RepoInfo::Syncing;
+    seafile::SyncStatus status = seafile::NoStatus;
+    if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_SYNCING)) {
+        status = seafile::Syncing;
     } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_ERROR)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_ERROR!");
-        status = seafile::RepoInfo::Error;
-    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_PAUSED)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_PAUSED!");
-        status = seafile::RepoInfo::Paused;
-    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_LOCKED_BY_ME)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_LOCKED_BY_ME!");
-        status = seafile::RepoInfo::LockedByMe;
+        status = seafile::Error;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_SYNCED)) {
+        status = seafile::Synced;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_PARTIAL_SYNCED)) {
+        status = seafile::PartialSynced;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_CLOUD)) {
+        status = seafile::Cloud;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_READ_ONLY)) {
+        status = seafile::ReadOnly;
     } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_LOCKED_BY_OTHERS)) {
-        // seaf_ext_log ("DllGetClassObject called for ICON_LOCKED_BY_OTHERS!");
-        status = seafile::RepoInfo::LockedByOthers;
+        status = seafile::LockedByOthers;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_LOCKED_BY_ME)) {
+        status = seafile::LockedByMe;
+    } else if (IsEqualIID(rclsid, CLSID_SEAFILE_ICON_PAUSED)) {
+        status = seafile::Paused;
     }
 
-    if (status != seafile::RepoInfo::NoStatus) {
+    if (status != seafile::NoStatus) {
         ShellExtClassFactory *pcf = new ShellExtClassFactory(status);
         const HRESULT hr = pcf->QueryInterface(riid, ppvOut);
         if(FAILED(hr))

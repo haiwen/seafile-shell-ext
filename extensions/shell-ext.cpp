@@ -13,14 +13,20 @@ namespace utils = seafile::utils;
 namespace {
 
 const int kWorktreeCacheExpireMSecs = 7 * 1000;
+const int kSyncStatusCacheExpireMSecs = 3 * 1000;
+const int kSyncStatusCacheMaxEntries = 10000;
 
 } // namespace
 
 std::unique_ptr<seafile::RepoInfoList> ShellExt::repos_cache_;
 uint64_t ShellExt::cache_ts_;
+seafile::utils::Mutex ShellExt::repos_cache_mutex_;
+
+std::map<std::string, ShellExt::SyncStatusCacheEntry> ShellExt::sync_status_cache_;
+seafile::utils::Mutex ShellExt::sync_status_cache_mutex_;
 
 // *********************** ShellExt *************************
-ShellExt::ShellExt(seafile::RepoInfo::Status status)
+ShellExt::ShellExt(seafile::SyncStatus status)
   : main_menu_(0),
     index_(0),
     first_(0),
@@ -181,17 +187,38 @@ seafile::RepoInfo ShellExt::getRepoInfoByPath(const std::string& path)
     return seafile::RepoInfo();
 }
 
-seafile::RepoInfo::Status
-ShellExt::getRepoFileStatus(const std::string& repo_id,
+seafile::SyncStatus
+ShellExt::getRepoSyncStatus(const std::string& _path,
+                            const std::string& repo_id,
                             const std::string& path_in_repo,
                             bool isdir)
 {
-    // TODO: get the files under the same folder in a single command to reduce overhead
-    seafile::GetFileStatusCommand cmd(repo_id, path_in_repo, isdir);
-    seafile::RepoInfo::Status status;
-    if (!cmd.sendAndWait(&status)) {
-        return seafile::RepoInfo::NoStatus;
+    seafile::utils::MutexLocker lock(&sync_status_cache_mutex_);
+
+    const std::string path = utils::normalizedPath(_path);
+    uint64_t now = utils::currentMSecsSinceEpoch();
+
+    auto cached = sync_status_cache_.find(path);
+    if (cached != sync_status_cache_.end() && now <= (cached->second.ts + kSyncStatusCacheExpireMSecs)) {
+        return cached->second.status;
     }
+
+    // Poor man's cache eviction. The main purpose is to prevent the sync status
+    // cache from using too much memory.
+    if (sync_status_cache_.size() > kSyncStatusCacheMaxEntries) {
+        sync_status_cache_.clear();
+    }
+
+    seafile::GetSyncStatusCommand cmd(path, repo_id, path_in_repo, isdir);
+    seafile::SyncStatus status;
+    if (!cmd.sendAndWait(&status)) {
+        return seafile::NoStatus;
+    }
+
+    SyncStatusCacheEntry entry;
+    entry.ts = utils::currentMSecsSinceEpoch();
+    entry.status = status;
+    sync_status_cache_[path] = entry;
 
     return status;
 }

@@ -2,31 +2,42 @@
 #define SEAFILE_REPO_INFO_H
 
 #include <string>
+#include <vector>
 
 namespace seafile
 {
+
+enum SyncStatus {
+    NoStatus = 0,
+
+    Syncing,
+    Error,
+    Synced,
+    PartialSynced,
+    LockedByOthers,
+    LockedByMe,
+    ReadOnly,
+
+    // Only for seadrive
+    Cloud,
+    // Only for applet
+    Paused,
+
+    N_Status,
+};
+
+std::string toString(SyncStatus st);
+
 class RepoInfo
 {
 public:
-    enum Status {
-        NoStatus = 0,
-        Paused,
-        Normal,
-        Syncing,
-        Error,
-        LockedByMe,
-        LockedByOthers,
-        ReadOnly,
-        N_Status,
-    };
-
     bool is_seadrive;
     std::string worktree;
 
     // The following members are only available if this is an applet repo
     std::string repo_id;
     std::string repo_name;
-    Status status;
+    SyncStatus status;
     bool support_file_lock;
     bool support_private_share;
 
@@ -46,7 +57,7 @@ public:
     RepoInfo(const std::string &repo_id,
              const std::string repo_name,
              const std::string &worktree,
-             Status status,
+             SyncStatus status,
              bool support_file_lock,
              bool support_private_share)
         : is_seadrive(false),
@@ -65,7 +76,7 @@ public:
     }
 };
 
-std::string toString(RepoInfo::Status st);
+std::string toString(SyncStatus st);
 
 typedef std::vector<RepoInfo> RepoInfoList;
 }
