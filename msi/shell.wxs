@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Includes.wxi?>
+  <?include ext.wxi?>
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIR">
+      <Directory Id="shell_bin_dir" Name="bin">
+        <Component Id="comp_shell" Guid="$(var.GuidOf32BitShellComponent)" Win64="no">
+          <Condition>NOT VersionNT64</Condition>
+          <!-- Context Menu Extension -->
+          <RegistryKey Root="HKLM" Key="Software\Classes\Directory\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Directory\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\Directory\Background\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Directory\Background\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\Folder\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Folder\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\LibraryLocation\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\LibraryLocation\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" Value="!(loc.AppName)" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\shellex\NoRecentDocs" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\*\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidContextMenu)}" Value="!(loc.AppName)" Type="string" />
+
+          <!-- Icon Overlays Exensions -->
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}" Value="!(loc.AppName)" Type="string" />
+
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSyncing&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSyncing&quot;"
+                         Value="{$(var.ShellGuidIconSyncing)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconError&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconError&quot;"
+                         Value="{$(var.ShellGuidIconError)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSynced&quot;"
+                         Value="{$(var.ShellGuidIconSynced)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPartialSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPartialSynced&quot;"
+                         Value="{$(var.ShellGuidIconPartialSynced)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconCloud&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconCloud&quot;"
+                         Value="{$(var.ShellGuidIconCloud)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconReadOnly&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconReadOnly&quot;"
+                         Value="{$(var.ShellGuidIconReadOnly)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByOthers&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByOthers&quot;"
+                         Value="{$(var.ShellGuidIconLockedByOthers)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByMe&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByMe&quot;"
+                         Value="{$(var.ShellGuidIconLockedByMe)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPaused&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPaused&quot;"
+                         Value="{$(var.ShellGuidIconPaused)}" Type="string" />
+
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSyncing)}" Value="!(loc.AppName)ExtIconSyncing" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconError)}" Value="!(loc.AppName)ExtIconError" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSynced)}" Value="!(loc.AppName)ExtIconSynced" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconPartialSynced)}" Value="!(loc.AppName)ExtIconPartialSynced" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconCloud)}" Value="!(loc.AppName)ExtIconCloud" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconReadOnly)}" Value="!(loc.AppName)ExtIconReadOnly" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconLockedByOthers)}" Value="!(loc.AppName)ExtIconLockedByOthers" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconLockedByMe)}" Value="!(loc.AppName)ExtIconLockedByMe" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconPaused)}" Value="!(loc.AppName)ExtIconPaused" Type="string" />
+
+        </Component>
+        <Component Id="comp_shell64" Guid="$(var.GuidOf64BitShellComponent)" Win64="yes">
+          <Condition>VersionNT64</Condition>
+          <!-- Context Menu Extension -->
+          <RegistryKey Root="HKLM" Key="Software\Classes\Directory\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Directory\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\Directory\Background\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Directory\Background\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\Folder\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\Folder\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\LibraryLocation\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\LibraryLocation\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\!(loc.AppName)" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" Value="!(loc.AppName)" Type="string" />
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\shellex\NoRecentDocs" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\*\shellex\ContextMenuHandlers\!(loc.AppName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidContextMenu)}" Value="!(loc.AppName)" Type="string" />
+
+          <!-- Icon Overlays Exensions -->
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSyncing)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconError)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconSynced)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPartialSynced)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconCloud)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconReadOnly)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByOthers)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" Value="!(loc.AppName)" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}\InProcServer32" Value="[AppDataFolder]!(loc.AppName)\seafile_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconPaused)}" Value="!(loc.AppName)" Type="string" />
+
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSyncing&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSyncing&quot;"
+                         Value="{$(var.ShellGuidIconSyncing)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconError&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconError&quot;"
+                         Value="{$(var.ShellGuidIconError)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconSynced&quot;"
+                         Value="{$(var.ShellGuidIconSynced)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPartialSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPartialSynced&quot;"
+                         Value="{$(var.ShellGuidIconPartialSynced)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconCloud&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconCloud&quot;"
+                         Value="{$(var.ShellGuidIconCloud)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconReadOnly&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconReadOnly&quot;"
+                         Value="{$(var.ShellGuidIconReadOnly)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByOthers&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByOthers&quot;"
+                         Value="{$(var.ShellGuidIconLockedByOthers)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByMe&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconLockedByMe&quot;"
+                         Value="{$(var.ShellGuidIconLockedByMe)}" Type="string" />
+
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPaused&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\ &quot;.!(loc.AppName)ExtIconPaused&quot;"
+                         Value="{$(var.ShellGuidIconPaused)}" Type="string" />
+
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSyncing)}" Value="!(loc.AppName)ExtIconSyncing" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconError)}" Value="!(loc.AppName)ExtIconError" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSynced)}" Value="!(loc.AppName)ExtIconSynced" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconPartialSynced)}" Value="!(loc.AppName)ExtIconPartialSynced" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconCloud)}" Value="!(loc.AppName)ExtIconCloud" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconReadOnly)}" Value="!(loc.AppName)ExtIconReadOnly" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconLockedByOthers)}" Value="!(loc.AppName)ExtIconLockedByOthers" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconLockedByMe)}" Value="!(loc.AppName)ExtIconLockedByMe" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconPaused)}" Value="!(loc.AppName)ExtIconPaused" Type="string" />
+
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
