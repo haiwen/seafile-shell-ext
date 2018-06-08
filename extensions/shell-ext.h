@@ -86,7 +86,7 @@ private:
                       const seafile::RepoInfo& repo,
                       const std::string& path_in_repo);
     MENUITEMINFO createMenuItem(const std::string& text);
-    bool insertMainMenu();
+    bool insertMainMenu(const char* main_menu_name);
     void insertSubMenuItem(const std::string& text, MenuOp op);
     void tweakMenu(HMENU menu);
 

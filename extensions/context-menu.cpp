@@ -26,7 +26,8 @@ bool shouldIgnorePath(const std::string& path)
     return FALSE;
 }
 
-const char *kMainMenuName = "Seafile";
+const char *kMainMenuNameSeafile = "Seafile";
+const char *kMainMenuNameSeaDrive = "SeaDrive";
 
 }
 
@@ -147,7 +148,7 @@ STDMETHODIMP ShellExt::QueryContextMenu_Wrap(HMENU menu,
 
     buildSubMenu(path_, repo, path_in_repo);
 
-    if (!insertMainMenu()) {
+    if (!insertMainMenu(repo.is_seadrive ? kMainMenuNameSeaDrive : kMainMenuNameSeafile)) {
         return S_FALSE;
     }
 
@@ -267,7 +268,7 @@ STDMETHODIMP ShellExt::HandleMenuMsg2_Wrap(UINT uMsg, WPARAM wParam, LPARAM lPar
 /**
  * Add two menu seperators, with seafile menu between them
  */
-bool ShellExt::insertMainMenu()
+bool ShellExt::insertMainMenu(const char* main_menu_name)
 {
     // Insert a seperate before seafile menu
     if (!InsertMenu(main_menu_, index_++, MF_BYPOSITION |MF_SEPARATOR, 0, ""))
@@ -278,8 +279,8 @@ bool ShellExt::insertMainMenu()
     menuiteminfo.cbSize = sizeof(menuiteminfo);
     menuiteminfo.fMask = MIIM_FTYPE | MIIM_SUBMENU | MIIM_STRING | MIIM_ID;
     menuiteminfo.fType = MFT_STRING;
-    menuiteminfo.dwTypeData = (char*)kMainMenuName;
-    menuiteminfo.cch = strlen(kMainMenuName);
+    menuiteminfo.dwTypeData = (char*)main_menu_name;
+    menuiteminfo.cch = strlen(main_menu_name);
     // menuiteminfo.hbmpItem = HBMMENU_CALLBACK;
     menuiteminfo.hSubMenu = sub_menu_;
     menuiteminfo.wID = first_;
