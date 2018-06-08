@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include Id="SeafileExtInclude">
+  <?define ExtName="SeafileExt" ?>
+
   <?define        ShellGuidContextMenu="AD201805-4E05-4F2F-B0DE-D0381E6AE606" ?>
   <?define        ShellGuidIconSyncing="AD201805-4E05-4F2F-B0DE-D0381E6AE607" ?>
   <?define          ShellGuidIconError="AD201805-4E05-4F2F-B0DE-D0381E6AE608" ?>
