@@ -79,7 +79,8 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
 
     std::string path_in_repo;
     seafile::RepoInfo repo;
-    if (!pathInRepo(path, &path_in_repo, &repo)) {
+    bool is_category_dir = isSeaDriveCategoryDir(path);
+    if (!is_category_dir && !pathInRepo(path, &path_in_repo, &repo)) {
         // seaf_ext_log ("pathInRepo returns false for %s\n", path.c_str());
         return S_FALSE;
     }

@@ -98,6 +98,8 @@ private:
                                           const std::string& repo_id,
                                           const std::string& path_in_repo,
                                           bool isdir);
+    bool isSeaDriveCategoryDir(const std::string& path);
+
     /* the file/dir current clicked on */
     std::string path_;
 

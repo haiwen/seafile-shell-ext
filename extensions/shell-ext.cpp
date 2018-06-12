@@ -222,3 +222,23 @@ ShellExt::getRepoSyncStatus(const std::string& _path,
 
     return status;
 }
+
+bool
+ShellExt::isSeaDriveCategoryDir(const std::string& path)
+{
+    seafile::RepoInfoList repos;
+    if (!getReposList(&repos)) {
+        return false;
+    }
+    std::string p = utils::normalizedPath(path);
+
+    for (size_t i = 0; i < repos.size(); i++) {
+        std::string wt = repos[i].worktree;
+        seaf_ext_log ("work tree is %s, path is %s\n", wt.c_str(), p.c_str());
+        if (p.size() < wt.size() && wt.substr(0, p.size()) == p) {
+            return true;
+        }
+    }
+
+    return false;
+}
