@@ -109,6 +109,7 @@ private:
 
     static std::map<std::string, SyncStatusCacheEntry> sync_status_cache_;
     static seafile::utils::Mutex sync_status_cache_mutex_;
+    static std::string drive_letter_;
 
     /* The main menu */
     HMENU main_menu_;
@@ -121,7 +122,6 @@ private:
 
     std::vector<MenuOp> active_menu_items_;
     bool is_seadrive_menu_;
-    std::string drive_letter_;
 };
 
 #endif // SEAFILE_EXT_SHELL_EXT_H

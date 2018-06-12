@@ -81,7 +81,7 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
     seafile::RepoInfo repo;
     bool is_category_dir = isSeaDriveCategoryDir(path);
     if (!is_category_dir && !pathInRepo(path, &path_in_repo, &repo)) {
-        // seaf_ext_log ("pathInRepo returns false for %s\n", path.c_str());
+        seaf_ext_log ("pathInRepo returns false for %s\n", path.c_str());
         return S_FALSE;
     }
 
@@ -104,8 +104,9 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
     // }
 
     // Then check the file status.
-    seafile::SyncStatus status= getRepoSyncStatus(
+    seafile::SyncStatus status = getRepoSyncStatus(
             path, repo.repo_id, path_in_repo, attr & FILE_ATTRIBUTE_DIRECTORY);
+    // seaf_ext_log ("file = %s, status = %s", path.c_str(), toString(status).c_str());
 
     if (status == seafile::Paused && !path_in_repo.empty()) {
         return S_FALSE;
