@@ -112,6 +112,8 @@ bool ListReposCommand::parseDriveResponse(const std::string& raw_resp,
         std::string repo_dir = utils::normalizedPath(line);
         // seaf_ext_log ("repo dir: %s\n", repo_dir.c_str());
         infos->push_back(RepoInfo(repo_dir));
+        drive_letter_ = repo_dir.substr(0, 3);
+        // seaf_ext_log ("drive letter: %s\n", drive_letter_.c_str());
     }
     return true;
 }

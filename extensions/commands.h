@@ -244,6 +244,7 @@ class ListReposCommand : public AppletCommand<RepoInfoList>
 {
 public:
     ListReposCommand();
+    const std::string& driveLetter() { return drive_letter_; }
 
 protected:
     std::string serialize();
@@ -256,6 +257,9 @@ protected:
     void mergeResponse(RepoInfoList *resp,
                        const RepoInfoList &appletResp,
                        const RepoInfoList &driveResp);
+
+private:
+    std::string drive_letter_;
 };
 
 class GetSyncStatusCommand : public AppletCommand<SyncStatus>
