@@ -345,7 +345,7 @@ void ShellExt::buildSubMenu(const std::string& path,
         insertSubMenuItem(SEAFILE_TR("share to a group"), ShareToGroup);
     }
 
-    if (repo.support_file_lock && !is_dir) {
+    if (!is_dir) {
         seafile::SyncStatus status =
             getRepoSyncStatus(path, repo.repo_id, path_in_repo, false);
 
