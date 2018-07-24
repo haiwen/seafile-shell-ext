@@ -110,4 +110,4 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconPaused"]
+#[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconPaused"]

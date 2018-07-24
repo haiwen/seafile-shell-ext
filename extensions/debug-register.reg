@@ -139,15 +139,15 @@ Windows Registry Editor Version 5.00
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}"
 
 # Icon Overlay IconPaused
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
-"{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"="SeafileExtIconPaused"
+#[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
+#"{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"="SeafileExtIconPaused"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}]
-@="SeafileExtIconPaused"
+#[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}]
+#@="SeafileExtIconPaused"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}\InProcServer32]
-@="C:\\dev\\seafile_ext64.dll"
-"ThreadingModel"="Apartment"
+#[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}\InProcServer32]
+#@="C:\\dev\\seafile_ext64.dll"
+#"ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPaused"]
-@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"
+#[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPaused"]
+#@="{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}"

@@ -11,7 +11,6 @@
   <?define       ShellGuidIconReadOnly="AD201805-4E05-4F2F-B0DE-D0381E6AE60C" ?>
   <?define ShellGuidIconLockedByOthers="AD201805-4E05-4F2F-B0DE-D0381E6AE60D" ?>
   <?define     ShellGuidIconLockedByMe="AD201805-4E05-4F2F-B0DE-D0381E6AE60E" ?>
-  <?define         ShellGuidIconPaused="AD201805-4E05-4F2F-B0DE-D0381E6AE60F" ?>
 
   <?define   GuidOfShellExtComponent="AD201805-0000-0000-0000-000000000000" ?>
   <?define GuidOf32BitShellComponent="AD201805-0000-0000-0000-000000000001" ?>
