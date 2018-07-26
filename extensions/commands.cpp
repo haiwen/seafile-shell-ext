@@ -66,6 +66,7 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         SyncStatus st;
         bool support_file_lock;
         bool support_private_share;
+        bool support_internal_link;
 
         repo_id = parts[0];
         repo_name = parts[1];
@@ -73,6 +74,7 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         status = parts[3];
         support_file_lock = parts[4] == "file-lock-supported";
         support_private_share = parts[5] == "private-share-supported";
+        support_internal_link = parts[6] == "internal-link-supported";
         if (status == "paused") {
             st = Paused;
         }
@@ -93,7 +95,8 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         // seaf_ext_log ("status for %s is \"%s\"", repo_name.c_str(),
         // status.c_str());
         infos->push_back(RepoInfo(repo_id, repo_name, worktree, st,
-                                  support_file_lock, support_private_share));
+                                  support_file_lock, support_private_share,
+                                  support_internal_link));
     }
 
     reposInfoTimestamp = utils::currentMSecsSinceEpoch();
