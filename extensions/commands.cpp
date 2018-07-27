@@ -40,7 +40,8 @@ ListReposCommand::ListReposCommand()
 std::string ListReposCommand::serialize()
 {
     char buf[512];
-    snprintf (buf, sizeof(buf), "%I64u", reposInfoTimestamp);
+    const char *version = "v1";
+    snprintf (buf, sizeof(buf), "%I64u\t%s", reposInfoTimestamp, version);
     return buf;
 }
 
@@ -54,19 +55,21 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
 {
     std::vector<std::string> lines = utils::split(raw_resp, '\n');
     if (lines.empty()) {
+        // seaf_ext_log("lines is empty");
         return true;
     }
     for (size_t i = 0; i < lines.size(); i++) {
         std::string line = lines[i];
+        // seaf_ext_log("lines = %s", line.c_str());
         std::vector<std::string> parts = utils::split(line, '\t');
-        if (parts.size() != 6) {
+        if (parts.size() < 6) {
             continue;
         }
         std::string repo_id, repo_name, worktree, status;
         SyncStatus st;
         bool support_file_lock;
         bool support_private_share;
-        bool support_internal_link;
+        bool support_internal_link = false;
 
         repo_id = parts[0];
         repo_name = parts[1];
@@ -74,7 +77,9 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         status = parts[3];
         support_file_lock = parts[4] == "file-lock-supported";
         support_private_share = parts[5] == "private-share-supported";
-        support_internal_link = parts[6] == "internal-link-supported";
+        if (parts.size() >= 6) {
+            support_internal_link = parts[6] == "internal-link-supported";
+        }
         if (status == "paused") {
             st = Paused;
         }
