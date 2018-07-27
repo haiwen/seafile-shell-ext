@@ -40,6 +40,7 @@ public:
     SyncStatus status;
     bool support_file_lock;
     bool support_private_share;
+    bool support_internal_link;
 
     RepoInfo() : status(NoStatus)
     {
@@ -50,7 +51,8 @@ public:
           worktree(worktree),
           status(NoStatus),
           support_file_lock(false),
-          support_private_share(false)
+          support_private_share(false),
+          support_internal_link(false)
     {
     }
 
@@ -59,14 +61,16 @@ public:
              const std::string &worktree,
              SyncStatus status,
              bool support_file_lock,
-             bool support_private_share)
+             bool support_private_share,
+             bool support_internal_link)
         : is_seadrive(false),
           worktree(worktree),
           repo_id(repo_id),
           repo_name(repo_name),
           status(status),
           support_file_lock(support_file_lock),
-          support_private_share(support_private_share)
+          support_private_share(support_private_share),
+          support_internal_link(support_internal_link)
     {
     }
 
