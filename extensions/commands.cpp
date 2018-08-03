@@ -77,7 +77,7 @@ bool ListReposCommand::parseAppletResponse(const std::string& raw_resp,
         status = parts[3];
         support_file_lock = parts[4] == "file-lock-supported";
         support_private_share = parts[5] == "private-share-supported";
-        if (parts.size() >= 6) {
+        if (parts.size() > 6) {
             support_internal_link = parts[6] == "internal-link-supported";
         }
         if (status == "paused") {
