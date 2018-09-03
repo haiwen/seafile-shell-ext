@@ -26,8 +26,8 @@ bool shouldIgnorePath(const std::string& path)
     return FALSE;
 }
 
-const char *kMainMenuNameSeafile = "Seafile";
-const char *kMainMenuNameSeaDrive = "SeaDrive";
+const char *kMainMenuNameSeafile = "TeamFile";
+const char *kMainMenuNameSeaDrive = "TeamDrive";
 
 }
 
@@ -334,10 +334,8 @@ void ShellExt::buildSubMenu(const std::string& path,
     if (repo.is_seadrive) {
         insertSubMenuItem(SEAFILE_TR("download"), Download);
     }
-    insertSubMenuItem(SEAFILE_TR("get seafile download link"), GetShareLink);
-    if (repo.support_internal_link) {
-        insertSubMenuItem(SEAFILE_TR("get seafile internal link"), GetInternalLink);
-    }
+//    insertSubMenuItem(SEAFILE_TR("get alifile download link"), GetShareLink);
+//    insertSubMenuItem(SEAFILE_TR("get alifile internal link"), GetInternalLink);
 
     // FIXME: seadrive client doens't support private share dialog yet.
     std::unique_ptr<wchar_t[]> path_w(utils::utf8ToWString(path_));
