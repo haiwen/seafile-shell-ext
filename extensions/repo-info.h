@@ -46,13 +46,14 @@ public:
     {
     }
 
-    RepoInfo(const std::string worktree)
+    RepoInfo(const std::string worktree,
+             bool support_internal_link)
         : is_seadrive(true),
           worktree(worktree),
           status(NoStatus),
           support_file_lock(false),
           support_private_share(false),
-          support_internal_link(false)
+          support_internal_link(support_internal_link)
     {
     }
 
