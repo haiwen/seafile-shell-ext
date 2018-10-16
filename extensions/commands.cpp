@@ -112,16 +112,22 @@ bool ListReposCommand::parseDriveResponse(const std::string& raw_resp,
                                           RepoInfoList* infos)
 {
     std::vector<std::string> lines = utils::split(raw_resp, '\n');
+    bool support_internal_link = false;
     if (lines.empty()) {
         return true;
     }
     for (size_t i = 0; i < lines.size(); i++) {
         std::string line = lines[i];
-        std::string repo_dir = utils::normalizedPath(line);
-        // seaf_ext_log ("repo dir: %s\n", repo_dir.c_str());
-        infos->push_back(RepoInfo(repo_dir));
-        drive_letter_ = repo_dir.substr(0, 3);
-        // seaf_ext_log ("drive letter: %s\n", drive_letter_.c_str());
+        if (i == 0) {
+          support_internal_link = line == "internal-link-supported";
+        } else {
+          std::string repo_dir = utils::normalizedPath(line);
+
+          // seaf_ext_log ("repo dir: %s\n", repo_dir.c_str());
+          infos->push_back(RepoInfo(repo_dir, support_internal_link));
+          drive_letter_ = repo_dir.substr(0, 3);
+          // seaf_ext_log ("drive letter: %s\n", drive_letter_.c_str());
+        }    
     }
     return true;
 }
