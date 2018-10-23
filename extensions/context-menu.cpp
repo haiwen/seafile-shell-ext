@@ -354,7 +354,7 @@ void ShellExt::buildSubMenu(const std::string& path,
         if (status == seafile::LockedByMe) {
             insertSubMenuItem(SEAFILE_TR("unlock this file"), UnlockFile);
         }
-        else if (status != seafile::LockedByOthers) {
+        else if (status != seafile::LockedByOthers && status != seafile::ReadOnly) {
             insertSubMenuItem(SEAFILE_TR("lock this file"), LockFile);
         }
     }
