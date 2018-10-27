@@ -127,7 +127,7 @@ bool ListReposCommand::parseDriveResponse(const std::string& raw_resp,
           infos->push_back(RepoInfo(repo_dir, support_internal_link));
           drive_letter_ = repo_dir.substr(0, 3);
           // seaf_ext_log ("drive letter: %s\n", drive_letter_.c_str());
-        }    
+        }
     }
     return true;
 }
