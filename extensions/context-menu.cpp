@@ -334,7 +334,7 @@ void ShellExt::buildSubMenu(const std::string& path,
     if (repo.is_seadrive) {
         insertSubMenuItem(SEAFILE_TR("download"), Download);
     }
-    insertSubMenuItem(SEAFILE_TR("get seafile download link"), GetShareLink);
+    insertSubMenuItem(SEAFILE_TR("get seafile share link"), GetShareLink);
     if (repo.support_internal_link) {
         insertSubMenuItem(SEAFILE_TR("get seafile internal link"), GetInternalLink);
     }
