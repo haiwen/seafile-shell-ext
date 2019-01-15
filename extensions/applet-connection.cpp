@@ -10,7 +10,7 @@
 
 namespace {
 
-const char *kSeafExtPipeNameApplet = "\\\\.\\pipe\\seafile_ext_pipe";
+const char *kSeafExtPipeNameApplet = "\\\\.\\pipe\\seafile_ext_pipe_";
 const char *kSeafExtPipeNameDrive = "\\\\.\\pipe\\seadrive_ext_pipe_";
 
 struct ThreadData {
@@ -45,7 +45,8 @@ AppletConnection *AppletConnection::drive_singleton_;
 AppletConnection *AppletConnection::appletInstance()
 {
     if (!applet_singleton_) {
-        static AppletConnection v(kSeafExtPipeNameApplet);
+        static std::string local_pipe_name = utils::getLocalPipeName(kSeafExtPipeNameApplet);
+        static AppletConnection v(local_pipe_name.c_str());
         applet_singleton_ = &v;
     }
     return applet_singleton_;
