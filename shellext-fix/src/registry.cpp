@@ -41,16 +41,43 @@ int removeRegKey(HKEY root, const std::wstring& path, const std::wstring& subkey
     return 0;
 }
 
+std::string wstring2String(const std::wstring &wstr)
+{
+    std::string str;
+    int nLen = (int)wstr.length();
+    str.resize(nLen, ' ');
+    int nResult = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)wstr.c_str(), nLen, (LPSTR)str.c_str(), nLen, NULL, NULL);
+    if (nResult == 0)
+    {
+        return "";
+    }
+    return str;
+}
+
+std::wstring string2Wstring(std::string s)
+{
+    std::string curLocale = setlocale(LC_ALL, "");
+    const char* _Source = s.c_str();
+    size_t _Dsize = mbstowcs(NULL, _Source, 0) + 1;
+    wchar_t *_Dest = new wchar_t[_Dsize];
+    wmemset(_Dest, 0, _Dsize);
+    mbstowcs(_Dest,_Source,_Dsize);
+    std::wstring result = _Dest;
+    delete []_Dest;
+    setlocale(LC_ALL, curLocale.c_str());
+    return result;
+}
+
 } //namespace
 
 bool cleanRegistryItem(HKEY root, const std::wstring& path)
 {
     HKEY parent_key;
-    std::list<std::wstring> keylist;
+    std::list<std::string> keylist;
     LONG result = openKey(root, path, &parent_key, KEY_READ|KEY_WOW64_64KEY);
     if(result != ERROR_SUCCESS)
     {
-        cout << "open register item error";
+        printf("open register item error");
         return false;
     }
 
@@ -70,15 +97,15 @@ bool cleanRegistryItem(HKEY root, const std::wstring& path)
                             NULL,
                             NULL);
 
-    if(result!=ERROR_SUCCESS)
+    if(result != ERROR_SUCCESS)
     {
-        qDebug("regquery info key failed");
+        printf("regquery info key failed");
         return false;
     }
 
     DWORD lpcchName = 1024;
     wchar_t lpName[1024] = L"";
-    for(DWORD dwIndex=0; dwIndex<lpcSubKeys; ++dwIndex)
+    for(DWORD dwIndex = 0; dwIndex < lpcSubKeys; ++dwIndex)
     {
         RegEnumKeyExW(parent_key,
                       dwIndex,
@@ -88,22 +115,24 @@ bool cleanRegistryItem(HKEY root, const std::wstring& path)
                       NULL,
                       NULL,
                       NULL);
-        keylist.push_back(lpName);
+        std::string strlpname = wstring2String(lpName);
+        keylist.push_back(strlpname);
         memset(lpName, 0, sizeof(lpName));
         lpcchName = 1024;
     }
     RegCloseKey(parent_key);
+    std::list<std::string>::iterator keyiter;
 
-    for(int i = 0; i < keylist.size(); i++)
+    for(keyiter = keylist.begin(); keyiter != keylist.end(); keyiter++)
     {
-        printf("key item is %s \n", keylist[i].c_str());
-        if((keylist[i].find("Seafile") == string::npos) || (keylist[i].find("OneDrive") == string::npos)) {
+        std::string keyname = *keyiter;
+        printf("key item is %s \n", keyname.c_str());
+        if(strstr(keyname.c_str(),"Seafile") || strstr(keyname.c_str(),"OneDrive")) {
 
         } else {
-            int result = removeRegKey(root, path, keylist[i]);
-            printf("remove keylist %s, result is %d \n", keylist[i].c_str(), result);
+            std::wstring wstrkeyname = string2Wstring(keyname);
+            int result = removeRegKey(root, path, wstrkeyname);
+            printf("remove keylist %s, result is %d \n", (keyname).c_str(), result);
         }
-
     }
-
 }

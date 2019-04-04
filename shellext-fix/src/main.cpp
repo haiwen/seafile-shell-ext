@@ -2,7 +2,7 @@
 #include "registry.h"
 
 namespace {
-	const std::wstring kRGISTRYPATH = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers";
+	const std::wstring kRGISTRYPATH = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers";
 } //namespace
 
 int main()
