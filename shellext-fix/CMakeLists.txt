@@ -1,0 +1,28 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+
+PROJECT(shellext-fix)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+INCLUDE_DIRECTORIES(
+  src
+)
+
+SET(SHELLEXT_FIX_SOURCES
+    ${PROJECT_SOURCE_DIR}/src/registry.cpp
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/log.cpp
+)
+
+SET(CMAKE_RC_COMPILE_OBJECT
+      "<CMAKE_RC_COMPILER> -i <SOURCE> -o <OBJECT>")
+
+## Add resource file
+SET(RESOURCE_FILES resources/shellext-fix.rc)
+
+ADD_EXECUTABLE(shellext-fix ${RESOURCE_FILES} ${SHELLEXT_FIX_SOURCES})
+
+## Add extern lib
+TARGET_LINK_LIBRARIES(shellext-fix shlwapi)
+
+INSTALL(TARGETS shellext-fix DESTINATION bin)
+
