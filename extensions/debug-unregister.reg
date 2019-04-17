@@ -30,7 +30,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE607}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconSyncing"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\       ".SeafileExtIconSyncing"]
 
 # Icon Overlay IconError
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -40,7 +40,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE608}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconError"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconError"]
 
 # Icon Overlay IconSynced
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -50,7 +50,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE609}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconSynced"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\       ".SeafileExtIconSynced"]
 
 # Icon Overlay IconPartialSynced
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -60,7 +60,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconPartialSynced"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\      ".SeafileExtIconPartialSynced"]
 
 # Icon Overlay IconCloud
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -70,7 +70,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconCloud"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconCloud"]
 
 # Icon Overlay IconReadOnly
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -90,7 +90,7 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}\InProcServer32]
 
-[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconLockedByOthers"]
+[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\     ".SeafileExtIconLockedByOthers"]
 
 # Icon Overlay IconLockedByMe
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved]
@@ -110,4 +110,4 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AD201805-4E05-4F2F-B0DE-D0381E6AE60F}\InProcServer32]
 
-#[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\    ".SeafileExtIconPaused"]
+#[-HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPaused"]
