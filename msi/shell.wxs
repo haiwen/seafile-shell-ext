@@ -68,36 +68,36 @@
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" Value="$(var.ExtName)" Type="string" />
 
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSyncing&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSyncing&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.02$(var.ExtName)IconSyncing&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.02$(var.ExtName)IconSyncing&quot;"
                          Value="{$(var.ShellGuidIconSyncing)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconError&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconError&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.08$(var.ExtName)IconError&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.08$(var.ExtName)IconError&quot;"
                          Value="{$(var.ShellGuidIconError)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSynced&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSynced&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.01$(var.ExtName)IconSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.01$(var.ExtName)IconSynced&quot;"
                          Value="{$(var.ShellGuidIconSynced)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconPartialSynced&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconPartialSynced&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.03$(var.ExtName)IconPartialSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.03$(var.ExtName)IconPartialSynced&quot;"
                          Value="{$(var.ShellGuidIconPartialSynced)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconCloud&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconCloud&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.07$(var.ExtName)IconCloud&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.07$(var.ExtName)IconCloud&quot;"
                          Value="{$(var.ShellGuidIconCloud)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconReadOnly&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconReadOnly&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.06$(var.ExtName)IconReadOnly&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.06$(var.ExtName)IconReadOnly&quot;"
                          Value="{$(var.ShellGuidIconReadOnly)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByOthers&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByOthers&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.04$(var.ExtName)IconLockedByOthers&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.04$(var.ExtName)IconLockedByOthers&quot;"
                          Value="{$(var.ShellGuidIconLockedByOthers)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByMe&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByMe&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.05$(var.ExtName)IconLockedByMe&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.05$(var.ExtName)IconLockedByMe&quot;"
                          Value="{$(var.ShellGuidIconLockedByMe)}" Type="string" />
 
           <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSyncing)}" Value="$(var.ExtName)IconSyncing" Type="string" />
@@ -173,36 +173,36 @@
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidIconLockedByMe)}" Value="$(var.ExtName)" Type="string" />
 
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSyncing&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSyncing&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.02$(var.ExtName)IconSyncing&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.02$(var.ExtName)IconSyncing&quot;"
                          Value="{$(var.ShellGuidIconSyncing)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconError&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconError&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.08$(var.ExtName)IconError&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.08$(var.ExtName)IconError&quot;"
                          Value="{$(var.ShellGuidIconError)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSynced&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconSynced&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.01$(var.ExtName)IconSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.01$(var.ExtName)IconSynced&quot;"
                          Value="{$(var.ShellGuidIconSynced)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconPartialSynced&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconPartialSynced&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.03$(var.ExtName)IconPartialSynced&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.03$(var.ExtName)IconPartialSynced&quot;"
                          Value="{$(var.ShellGuidIconPartialSynced)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconCloud&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconCloud&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.07$(var.ExtName)IconCloud&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.07$(var.ExtName)IconCloud&quot;"
                          Value="{$(var.ShellGuidIconCloud)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconReadOnly&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconReadOnly&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.06$(var.ExtName)IconReadOnly&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.06$(var.ExtName)IconReadOnly&quot;"
                          Value="{$(var.ShellGuidIconReadOnly)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByOthers&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByOthers&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.04$(var.ExtName)IconLockedByOthers&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.04$(var.ExtName)IconLockedByOthers&quot;"
                          Value="{$(var.ShellGuidIconLockedByOthers)}" Type="string" />
 
-          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByMe&quot;" />
-          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.$(var.ExtName)IconLockedByMe&quot;"
+          <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.05$(var.ExtName)IconLockedByMe&quot;" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   &quot;.05$(var.ExtName)IconLockedByMe&quot;"
                          Value="{$(var.ShellGuidIconLockedByMe)}" Type="string" />
 
           <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidIconSyncing)}" Value="$(var.ExtName)IconSyncing" Type="string" />
