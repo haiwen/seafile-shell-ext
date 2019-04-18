@@ -37,7 +37,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconSyncing"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".02SeafileExtIconSyncing"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE607}"
 
 # Icon Overlay IconError
@@ -51,7 +51,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconError"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".08SeafileExtIconError"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE608}"
 
 # Icon Overlay IconSynced
@@ -65,7 +65,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconSynced"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".01SeafileExtIconSynced"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE609}"
 
 # Icon Overlay IconPartialSynced
@@ -79,7 +79,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconPartialSynced"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".03SeafileExtIconPartialSynced"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60A}"
 
 # Icon Overlay IconCloud
@@ -93,7 +93,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconCloud"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".07SeafileExtIconCloud"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60B}"
 
 # Icon Overlay IconReadOnly
@@ -107,7 +107,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconReadOnly"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".06SeafileExtIconReadOnly"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60C}"
 
 # Icon Overlay IconLockedByOthers
@@ -121,7 +121,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconLockedByOthers"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".04SeafileExtIconLockedByOthers"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60D}"
 
 # Icon Overlay IconLockedByMe
@@ -135,7 +135,7 @@ Windows Registry Editor Version 5.00
 @="C:\\dev\\seafile_ext64.dll"
 "ThreadingModel"="Apartment"
 
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".SeafileExtIconLockedByMe"]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellIconOverlayIdentifiers\   ".05SeafileExtIconLockedByMe"]
 @="{AD201805-4E05-4F2F-B0DE-D0381E6AE60E}"
 
 # Icon Overlay IconPaused
