@@ -60,13 +60,13 @@ std::string wstring2String(const std::wstring& wstr)
 std::wstring string2Wstring(std::string s)
 {
     std::string curLocale = setlocale(LC_ALL, "");
-    const char *_Source = s.c_str();
-    size_t _Dsize = mbstowcs(NULL, _Source, 0) + 1;
-    wchar_t *_Dest = new wchar_t[_Dsize];
-    wmemset(_Dest, 0, _Dsize);
-    mbstowcs(_Dest, _Source, _Dsize);
-    std::wstring result = _Dest;
-    delete []_Dest;
+    const char *source = s.c_str();
+    size_t size = mbstowcs(NULL, source, 0) + 1;
+    wchar_t *buf = new wchar_t[size];
+    wmemset(buf, 0, size);
+    mbstowcs(buf, source, size);
+    std::wstring result = buf;
+    delete []buf;
     setlocale(LC_ALL, curLocale.c_str());
 
     return result;
@@ -136,6 +136,11 @@ bool removeIconExts(HKEY root, const std::wstring& path)
     std::vector<std::string>::iterator keyiter;
     bool is_delsubkey_success = true;
     std::vector<std::string> subkey_list = collectRegisteredIconExts(root, path);
+
+    if(subkey_list.size() == 0)
+    {
+        return false;
+    }
 
     for (keyiter = subkey_list.begin(); keyiter != subkey_list.end(); keyiter++)
     {
