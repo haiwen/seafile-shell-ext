@@ -27,4 +27,6 @@
 #include <wininet.h>
 #include <aclapi.h>
 
+#include "ext-config.h"
+
 #endif // SEAFILE_EXT_EXT_COMMON_H

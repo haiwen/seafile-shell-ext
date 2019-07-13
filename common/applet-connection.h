@@ -17,8 +17,6 @@ public:
     static AppletConnection *appletInstance();
     static AppletConnection *driveInstance();
 
-    bool connect();
-
     /**
      * Send the command in a separate thread, returns immediately
      */
@@ -31,6 +29,7 @@ public:
 
 private:
     AppletConnection(const char* pipe_name);
+    bool connect();
     bool readResponse(std::string *out);
     bool writeRequest(const std::string& cmd);
     void onPipeError();
