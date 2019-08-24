@@ -219,6 +219,9 @@ STDMETHODIMP ShellExt::InvokeCommand_Wrap(LPCMINVOKECOMMANDINFO info)
     } else if (op == Download) {
         seafile::DownloadCommand cmd(path_);
         cmd.send(is_seadrive_menu_);
+    } else if (op == ShowLockedBy) {
+        seafile::ShowLockedByCommand cmd(path_);
+        cmd.send(is_seadrive_menu_);
     }
 
     return S_OK;
@@ -353,8 +356,9 @@ void ShellExt::buildSubMenu(const std::string& path,
 
         if (status == seafile::LockedByMe) {
             insertSubMenuItem(SEAFILE_TR("unlock this file"), UnlockFile);
-        }
-        else if (status != seafile::LockedByOthers && status != seafile::ReadOnly) {
+        } else if (status == seafile::LockedByOthers) {
+            insertSubMenuItem(SEAFILE_TR("locked by ..."), ShowLockedBy);
+        } else if (status != seafile::ReadOnly) {
             insertSubMenuItem(SEAFILE_TR("lock this file"), LockFile);
         }
     }

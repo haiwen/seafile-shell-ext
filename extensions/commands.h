@@ -302,6 +302,17 @@ private:
     std::string path_;
 };
 
+class ShowLockedByCommand : public SimpleAppletCommand {
+public:
+    ShowLockedByCommand(const std::string path);
+
+protected:
+    std::string serialize();
+
+private:
+    std::string path_;
+};
+
 }
 
 #endif // SEAFILE_EXTENSION_APPLET_COMMANDS_H

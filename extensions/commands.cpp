@@ -269,4 +269,15 @@ std::string DownloadCommand::serialize()
     return path_;
 }
 
+ShowLockedByCommand::ShowLockedByCommand(const std::string path)
+    : SimpleAppletCommand("show-locked-by"),
+      path_(path)
+{
+}
+
+std::string ShowLockedByCommand::serialize()
+{
+    return path_;
+}
+
 } // namespace seafile

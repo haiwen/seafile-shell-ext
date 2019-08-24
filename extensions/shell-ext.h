@@ -80,6 +80,7 @@ private:
         ShareToGroup,
         ShowHistory,
         Download,
+        ShowLockedBy,
     };
 
     void buildSubMenu(const std::string& path,
