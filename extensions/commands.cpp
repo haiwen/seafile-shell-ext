@@ -280,4 +280,15 @@ std::string ShowLockedByCommand::serialize()
     return path_;
 }
 
+GetUploadLinkByCommand::GetUploadLinkByCommand(const std::string path)
+    : SimpleAppletCommand("get-upload-link"),
+      path_(path)
+{
+}
+
+std::string GetUploadLinkByCommand::serialize()
+{
+    return path_;
+}
+
 } // namespace seafile

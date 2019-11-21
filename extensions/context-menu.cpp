@@ -222,6 +222,9 @@ STDMETHODIMP ShellExt::InvokeCommand_Wrap(LPCMINVOKECOMMANDINFO info)
     } else if (op == ShowLockedBy) {
         seafile::ShowLockedByCommand cmd(path_);
         cmd.send(is_seadrive_menu_);
+    } else if (op == GetUploadLink) {
+        seafile::GetUploadLinkByCommand cmd(path_);
+        cmd.send(is_seadrive_menu_);
     }
 
     return S_OK;
@@ -365,5 +368,9 @@ void ShellExt::buildSubMenu(const std::string& path,
 
     if (!is_dir) {
         insertSubMenuItem(SEAFILE_TR("view file history"), ShowHistory);
+    }
+
+    if (is_dir) {
+        insertSubMenuItem(SEAFILE_TR("get upload link"), GetUploadLink);
     }
 }
