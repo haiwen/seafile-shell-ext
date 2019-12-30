@@ -59,6 +59,7 @@ void I18NHelper::initChineseDict()
     lang_dict_["view file history"] = "查看文件历史";
     lang_dict_["download"] = "下载";
     lang_dict_["locked by ..."] = "显示文件锁定者";
+    lang_dict_["get upload link"] = "获取上传链接";
 }
 
 void I18NHelper::initGermanDict()
@@ -73,6 +74,7 @@ void I18NHelper::initGermanDict()
     lang_dict_["download"] = "Herunterladen";
     // TODO: German translation
     lang_dict_["locked by ..."] = "Locked by ...";
+    lang_dict_["get upload link"] = "Holen Sie sich den Upload-Link";
 }
 
 I18NHelper::I18NHelper()

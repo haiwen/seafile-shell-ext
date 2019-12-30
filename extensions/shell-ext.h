@@ -81,6 +81,7 @@ private:
         ShowHistory,
         Download,
         ShowLockedBy,
+        GetUploadLink,
     };
 
     void buildSubMenu(const std::string& path,
