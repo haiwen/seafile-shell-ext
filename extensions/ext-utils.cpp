@@ -128,7 +128,11 @@ std::string getHomeDir()
         /* Try env variable first. */
         GetEnvironmentVariable("HOME", buf, MAX_PATH);
         if (buf[0] != '\0')
+#if defined(_MSC_VER)
+            home = _strdup(buf);
+#else
             home = strdup(buf);
+#endif
     }
 
     if (!home) {
@@ -139,7 +143,11 @@ std::string getHomeDir()
             GetUserProfileDirectory (hToken, buf, &len);
             CloseHandle(hToken);
             if (buf[0] != '\0')
+#if defined(_MSC_VER)
+                home = _strdup(buf);
+#else
                 home = strdup(buf);
+#endif
         }
     }
 
@@ -406,7 +414,11 @@ wchar_t *localeToWString(const std::string& src)
         return NULL;
     }
 
+#if defined(_MSC_VER)
+    return _wcsdup(dst);
+#else
     return wcsdup(dst);
+#endif
 }
 
 
@@ -471,7 +483,11 @@ wchar_t *utf8ToWString(const std::string& src)
         return NULL;
     }
 
+#if defined(_MSC_VER)
+    return _wcsdup(dst);
+#else
     return wcsdup(dst);
+#endif
 }
 
 bool isShellExtEnabled()
@@ -512,15 +528,24 @@ char *b64encode(const char *input)
     char buf[32767] = {0};
     DWORD retlen = 32767;
     CryptBinaryToString((BYTE*) input, strlen(input), CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, buf, &retlen);
+#if defined(_MSC_VER)
+    return _strdup(buf);
+#else
     return strdup(buf);
+#endif
 }
 
 std::string getLocalPipeName(const char *pipe_name)
 {
+#if defined(_MSC_VER)
+    const DWORD buf_char_count = 32767;
+    DWORD buf_size = buf_char_count;
+#else
     DWORD buf_char_count = 32767;
+#endif
     char user_name_buf[buf_char_count];
 
-    if (GetUserName(user_name_buf, &buf_char_count) == 0) {
+    if (GetUserName(user_name_buf, &buf_size) == 0) {
         seaf_ext_log ("Failed to get user name, GLE=%lu\n",
                       GetLastError());
         return pipe_name;

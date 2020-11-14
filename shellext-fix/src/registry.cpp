@@ -7,6 +7,7 @@
 
 #include "registry.h"
 #include "log.h"
+#include "locale.h"
 
 namespace {
 

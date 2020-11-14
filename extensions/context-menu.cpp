@@ -44,7 +44,11 @@ STDMETHODIMP ShellExt::Initialize_Wrap(LPCITEMIDLIST folder,
                                         HKEY /* hRegKey */)
 {
     FORMATETC format = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
+#if defined(_MSC_VER)
+    STGMEDIUM stg = {TYMED_HGLOBAL, NULL };
+#else
     STGMEDIUM stg = {TYMED_HGLOBAL, {L'\0'}, NULL};
+#endif
     HDROP drop;
     UINT count;
     UINT size;
