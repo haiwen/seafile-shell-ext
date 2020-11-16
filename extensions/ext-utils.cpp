@@ -537,15 +537,12 @@ char *b64encode(const char *input)
 
 std::string getLocalPipeName(const char *pipe_name)
 {
-#if defined(_MSC_VER)
     const DWORD buf_char_count = 32767;
-    DWORD buf_size = buf_char_count;
-#else
-    DWORD buf_char_count = 32767;
-#endif
+    DWORD char_count = buf_char_count;
+
     char user_name_buf[buf_char_count];
 
-    if (GetUserName(user_name_buf, &buf_size) == 0) {
+    if (GetUserName(user_name_buf, &char_count) == 0) {
         seaf_ext_log ("Failed to get user name, GLE=%lu\n",
                       GetLastError());
         return pipe_name;
