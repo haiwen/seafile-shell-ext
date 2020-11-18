@@ -13,7 +13,9 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <errno.h>
+#if !defined(_MSC_VER)
 #include <unistd.h>
+#endif
 
 #include <winsock2.h>
 #include <windows.h>
