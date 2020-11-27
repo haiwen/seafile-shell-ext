@@ -102,3 +102,6 @@ seafile-applet.rc
 
 *seafile-applet
 *.lib
+
+# vs
+extensions/seafile_ext.vcxproj.user
