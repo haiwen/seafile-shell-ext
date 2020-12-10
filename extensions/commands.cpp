@@ -120,12 +120,21 @@ bool ListReposCommand::parseDriveResponse(const std::string& raw_resp,
         std::string line = lines[i];
         if (i == 0) {
           support_internal_link = line == "internal-link-supported";
-        } else {
+        }
+#if defined(_MSC_VER)
+        else if (i == 1) {
+            drive_letter_ = line;
+            // seaf_ext_log ("seadrive Root: %s\n", drive_letter_.c_str());
+        }
+#endif
+        else {
           std::string repo_dir = utils::normalizedPath(line);
 
           // seaf_ext_log ("repo dir: %s\n", repo_dir.c_str());
           infos->push_back(RepoInfo(repo_dir, support_internal_link));
+#if !defined(_MSC_VER)
           drive_letter_ = repo_dir.substr(0, 3);
+#endif
           // seaf_ext_log ("drive letter: %s\n", drive_letter_.c_str());
         }
     }

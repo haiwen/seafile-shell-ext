@@ -124,6 +124,7 @@
           <RegistryKey Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\$(var.ExtName)" />
           <RegistryValue Root="HKLM" Key="Software\Classes\LibraryFolder\Background\shellex\ContextMenuHandlers\$(var.ExtName)" Value="{$(var.ShellGuidContextMenu)}" Type="string" />
           <RegistryKey Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" Name="ContextMenuOptIn"  Value="" Type="string"/>
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}\InProcServer32" Value="[CommonAppDataFolder]$(var.ExtName)\seafile_ext64.dll" Type="string" />
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidContextMenu)}" Value="$(var.ExtName)" Type="string" />
