@@ -83,6 +83,9 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
     if (!is_category_dir && !pathInRepo(path, &path_in_repo, &repo)) {
         // seaf_ext_log ("pathInRepo returns false for %s\n", path.c_str());
         return S_FALSE;
+    } else if (is_category_dir) {
+        // seadrive 2x, not use icon overlay
+        return S_FALSE;
     }
 
     // seaf_ext_log ("path in repo: %s\n", path_in_repo.c_str());
