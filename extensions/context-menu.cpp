@@ -359,18 +359,16 @@ void ShellExt::buildSubMenu(const std::string& path,
         insertSubMenuItem(SEAFILE_TR("share to a group"), ShareToGroup);
     }
 
-    if (!repo.is_seadrive) {
-        if (!is_dir) {
-            seafile::SyncStatus status =
-                getRepoSyncStatus(path, repo.repo_id, path_in_repo, false);
+    if (!is_dir) {
+        seafile::SyncStatus status =
+            getRepoSyncStatus(path, repo.repo_id, path_in_repo, false);
 
-            if (status == seafile::LockedByMe) {
-                insertSubMenuItem(SEAFILE_TR("unlock this file"), UnlockFile);
-            } else if (status == seafile::LockedByOthers) {
-                insertSubMenuItem(SEAFILE_TR("locked by ..."), ShowLockedBy);
-            } else if (status != seafile::ReadOnly) {
-                insertSubMenuItem(SEAFILE_TR("lock this file"), LockFile);
-            }
+        if (status == seafile::LockedByMe) {
+            insertSubMenuItem(SEAFILE_TR("unlock this file"), UnlockFile);
+        } else if (status == seafile::LockedByOthers) {
+            insertSubMenuItem(SEAFILE_TR("locked by ..."), ShowLockedBy);
+        } else if (status != seafile::ReadOnly) {
+            insertSubMenuItem(SEAFILE_TR("lock this file"), LockFile);
         }
     }
 
