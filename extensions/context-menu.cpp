@@ -376,9 +376,7 @@ void ShellExt::buildSubMenu(const std::string& path,
         insertSubMenuItem(SEAFILE_TR("view file history"), ShowHistory);
     }
 
-    if (!repo.is_seadrive) {
-        if (is_dir) {
-            insertSubMenuItem(SEAFILE_TR("get upload link"), GetUploadLink);
-        }
+    if (is_dir) {
+        insertSubMenuItem(SEAFILE_TR("get upload link"), GetUploadLink);
     }
 }
