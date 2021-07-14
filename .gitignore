@@ -105,3 +105,4 @@ seafile-applet.rc
 
 # vs
 extensions/seafile_ext.vcxproj.user
+*.vs

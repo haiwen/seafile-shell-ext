@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <errno.h>
+
 #if !defined(_MSC_VER)
 #include <unistd.h>
 #endif
@@ -26,5 +27,7 @@
 #include <shlguid.h>
 #include <wininet.h>
 #include <aclapi.h>
+
+#include "ext-config.h"
 
 #endif // SEAFILE_EXT_EXT_COMMON_H

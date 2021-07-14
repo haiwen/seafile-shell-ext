@@ -14,11 +14,11 @@
 
 #include "log.h"
 #include "ext-utils.h"
-#include "shell-ext.h"
+#include "ext-config.h"
+
+extern HINSTANCE g_hmodThisDll;
 
 namespace {
-
-const int kPipeWaitTimeMSec = 1000;
 
 class OverLappedWrapper
 {
@@ -126,7 +126,7 @@ std::string getHomeDir()
 
     if (!home) {
         /* Try env variable first. */
-        GetEnvironmentVariable("HOME", buf, MAX_PATH);
+        GetEnvironmentVariableA("USERPROFILE", buf, MAX_PATH);
         if (buf[0] != '\0')
 #if defined(_MSC_VER)
             home = _strdup(buf);
@@ -140,7 +140,7 @@ std::string getHomeDir()
         HANDLE hToken = NULL;
         DWORD len = MAX_PATH;
         if (OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-            GetUserProfileDirectory (hToken, buf, &len);
+            GetUserProfileDirectoryA(hToken, buf, &len);
             CloseHandle(hToken);
             if (buf[0] != '\0')
 #if defined(_MSC_VER)
@@ -274,7 +274,7 @@ std::string formatErrorMessage()
         return "no error";
     }
     char buf[256] = {0};
-    ::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
+    ::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     error_code,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -332,9 +332,6 @@ std::string splitPath(const std::string& path, int *pos)
     }
 
     std::string p = normalizedPath(path);
-    while (p.size() > 1 && p[-1] == '/') {
-        p = p.substr(0, p.size() - 1);
-    }
     if (p.size() == 1) {
         return p;
     }
@@ -379,7 +376,7 @@ std::string getThisDllPath()
 
     if (module_filename[0] == '\0') {
         DWORD module_size;
-        module_size = GetModuleFileName(
+        module_size = GetModuleFileNameA(
             g_hmodThisDll, module_filename, MAX_PATH);
         if (!module_size)
             return "";
@@ -527,7 +524,7 @@ char *b64encode(const char *input)
 {
     char buf[32767] = {0};
     DWORD retlen = 32767;
-    CryptBinaryToString((BYTE*) input, strlen(input), CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, buf, &retlen);
+    CryptBinaryToStringA((BYTE*) input, strlen(input), CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, buf, &retlen);
 #if defined(_MSC_VER)
     return _strdup(buf);
 #else
@@ -542,7 +539,7 @@ std::string getLocalPipeName(const char *pipe_name)
 
     char user_name_buf[buf_char_count];
 
-    if (GetUserName(user_name_buf, &char_count) == 0) {
+    if (GetUserNameA(user_name_buf, &char_count) == 0) {
         seaf_ext_log ("Failed to get user name, GLE=%lu\n",
                       GetLastError());
         return pipe_name;
@@ -554,6 +551,16 @@ std::string getLocalPipeName(const char *pipe_name)
         free(encoded);
         return ret;
     }
+}
+
+std::string diskLetterFromPath(const std::string& path)
+{
+    int ord = PathGetDriveNumberA(path.c_str());
+    if (ord < 0) {
+        return "";
+    }
+    std::string letter({(char)('a' + (char)ord)});
+    return letter + ":";
 }
 
 } // namespace utils

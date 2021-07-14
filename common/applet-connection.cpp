@@ -69,7 +69,7 @@ AppletConnection::connect ()
     if (pipe_ != INVALID_HANDLE_VALUE) {
         CloseHandle (pipe_);
     }
-    pipe_ = CreateFile(
+    pipe_ = CreateFileA(
         pipe_name_,       // pipe name
         GENERIC_READ |          // read and write access
         GENERIC_WRITE,

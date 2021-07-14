@@ -1,9 +1,5 @@
 #include "ext-common.h"
-
-#include "log.h"
-#include "applet-connection.h"
 #include "ext-utils.h"
-
 #include "commands.h"
 
 namespace seafile {
