@@ -346,9 +346,9 @@ void ShellExt::buildSubMenu(const std::string& path,
         insertSubMenuItem(SEAFILE_TR("download"), Download);
     }
 #endif
-    insertSubMenuItem(SEAFILE_TR("get seafile share link"), GetShareLink);
+    insertSubMenuItem(SEAFILE_TR("get share link"), GetShareLink);
     if (repo.support_internal_link) {
-        insertSubMenuItem(SEAFILE_TR("get seafile internal link"), GetInternalLink);
+        insertSubMenuItem(SEAFILE_TR("get internal link"), GetInternalLink);
     }
 
     // FIXME: seadrive client doens't support private share dialog yet.

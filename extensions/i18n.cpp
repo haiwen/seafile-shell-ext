@@ -50,8 +50,8 @@ I18NHelper *I18NHelper::instance() {
 
 void I18NHelper::initChineseDict()
 {
-    lang_dict_["get seafile share link"] = "获取共享链接";
-    lang_dict_["get seafile internal link"] = "获取内部链接";
+    lang_dict_["get share link"] = "获取共享链接";
+    lang_dict_["get internal link"] = "获取内部链接";
     lang_dict_["lock this file"] = "锁定该文件";
     lang_dict_["unlock this file"] = "解锁该文件";
     lang_dict_["share to a user"] = "共享给其他用户";
@@ -64,8 +64,8 @@ void I18NHelper::initChineseDict()
 
 void I18NHelper::initGermanDict()
 {
-    lang_dict_["get seafile share link"] = "Freigabelink erstellen";
-    lang_dict_["get seafile internal link"] = "Internen Link erstellen";
+    lang_dict_["get share link"] = "Freigabelink erstellen";
+    lang_dict_["get internal link"] = "Internen Link erstellen";
     lang_dict_["lock this file"] = "Datei sperren";
     lang_dict_["unlock this file"] = "Datei entsperren";
     lang_dict_["share to a user"] = "Freigabe für Benutzer/in";
