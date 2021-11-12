@@ -34,6 +34,7 @@ private:
 
     void initChineseDict();
     void initGermanDict();
+    void initFrenchDict();
 
     std::map<string, string> lang_dict_;
 };
@@ -64,17 +65,30 @@ void I18NHelper::initChineseDict()
 
 void I18NHelper::initGermanDict()
 {
-    lang_dict_["get share link"] = "Freigabelink erstellen";
+    lang_dict_["get share link"] = "Download-Link erstellen";
     lang_dict_["get internal link"] = "Internen Link erstellen";
     lang_dict_["lock this file"] = "Datei sperren";
     lang_dict_["unlock this file"] = "Datei entsperren";
-    lang_dict_["share to a user"] = "Freigabe für Benutzer/in";
+    lang_dict_["share to a user"] = "Freigabe für Benutzer";
     lang_dict_["share to a group"] = "Freigabe für Gruppe";
     lang_dict_["view file history"] = "Vorgängerversionen";
     lang_dict_["download"] = "Herunterladen";
-    // TODO: German translation
-    lang_dict_["locked by ..."] = "Locked by ...";
-    lang_dict_["get upload link"] = "Holen Sie sich den Upload-Link";
+    lang_dict_["locked by ..."] = "Gesperrt durch …";
+    lang_dict_["get upload link"] = "Upload-Link erstellen";
+}
+
+void I18NHelper::initFrenchDict()
+{
+    lang_dict_["get share link"] = "Gréer lien de téléchargement";
+    lang_dict_["get internal link"] = "Gréer lien interne";
+    lang_dict_["lock this file"] = "Verrouiller le fichier";
+    lang_dict_["unlock this file"] = "Déverrouiller le fichier";
+    lang_dict_["share to a user"] = "Partager avec un utilisateur";
+    lang_dict_["share to a group"] = "Partager avec un groupe";
+    lang_dict_["view file history"] = "Versions précédentes";
+    lang_dict_["download"] = "download";
+    lang_dict_["locked by ..."] = "Verrouillé par ...";
+    lang_dict_["get upload link"] = "Gréer lien d'envol";
 }
 
 I18NHelper::I18NHelper()
@@ -84,6 +98,8 @@ I18NHelper::I18NHelper()
         initChineseDict();
     } else if (locale == "de") {
         initGermanDict();
+    } else if (locale == "fr") {
+        initFrenchDict();
     }
 }
 
