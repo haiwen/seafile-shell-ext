@@ -79,8 +79,8 @@ void I18NHelper::initGermanDict()
 
 void I18NHelper::initFrenchDict()
 {
-    lang_dict_["get share link"] = "Gréer lien de téléchargement";
-    lang_dict_["get internal link"] = "Gréer lien interne";
+    lang_dict_["get share link"] = "Créer lien de téléchargement";
+    lang_dict_["get internal link"] = "Créer lien interne";
     lang_dict_["lock this file"] = "Verrouiller le fichier";
     lang_dict_["unlock this file"] = "Déverrouiller le fichier";
     lang_dict_["share to a user"] = "Partager avec un utilisateur";
@@ -88,7 +88,7 @@ void I18NHelper::initFrenchDict()
     lang_dict_["view file history"] = "Versions précédentes";
     lang_dict_["download"] = "download";
     lang_dict_["locked by ..."] = "Verrouillé par ...";
-    lang_dict_["get upload link"] = "Gréer lien d'envol";
+    lang_dict_["get upload link"] = "Créer lien d'envol";
 }
 
 I18NHelper::I18NHelper()
