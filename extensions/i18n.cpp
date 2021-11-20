@@ -88,7 +88,7 @@ void I18NHelper::initFrenchDict()
     lang_dict_["view file history"] = "Versions précédentes";
     lang_dict_["download"] = "download";
     lang_dict_["locked by ..."] = "Verrouillé par ...";
-    lang_dict_["get upload link"] = "Créer lien d'envol";
+    lang_dict_["get upload link"] = "Créer lien d'envoi";
 }
 
 I18NHelper::I18NHelper()
