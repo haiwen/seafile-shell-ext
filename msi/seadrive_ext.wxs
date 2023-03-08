@@ -15,8 +15,6 @@
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InProcServer32" Value="[CommonAppDataFolder]$(var.SeaDriveExtName)\seadrive_ext.dll" Type="string" />
           <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
 
-          <RegistryKey   Root="HKCR" Key=".png\shellex\{$(var.GuidOfThumbnailHandlerKey)}" />
-          <RegistryValue Root="HKCR" Key=".png\shellex\{$(var.GuidOfThumbnailHandlerKey)}" Value="{$(var.ShellGuidSeaDriveThumbnail)}" Type="string" />
 
         </Component>
         <Component Id="comp_seadrive_shell64" Guid="$(var.GuidOf64BitSeaDriveShellComponent)" Win64="yes">
@@ -29,8 +27,6 @@
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InProcServer32" Value="[CommonAppDataFolder]$(var.SeaDriveExtName)\seadrive_ext64.dll" Type="string" />
           <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
 
-          <RegistryKey   Root="HKCR" Key=".png\shellex\{$(var.GuidOfThumbnailHandlerKey)}" />
-          <RegistryValue Root="HKCR" Key=".png\shellex\{$(var.GuidOfThumbnailHandlerKey)}" Value="{$(var.ShellGuidSeaDriveThumbnail)}" Type="string" />
 
         </Component>
       </Directory>

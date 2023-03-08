@@ -8,7 +8,4 @@
   <?define   GuidOfSeaDriveShellExtComponent="AD201912-0000-0000-0000-000000000000" ?>
   <?define GuidOf32BitSeaDriveShellComponent="AD201912-0000-0000-0000-000000000001" ?>
   <?define GuidOf64BitSeaDriveShellComponent="AD201912-0000-0000-0000-000000000002" ?>
-  <!-- This one is used to associate a thumbnail handler to a file
-       type, and is hard-coded by windows.-->
-  <?define         GuidOfThumbnailHandlerKey="E357FCCD-A995-4576-B01F-234630154E96" ?>
 </Include>
