@@ -86,7 +86,6 @@ bool SeadriveThumbnailProvider::isFileCached(const std::string& path)
         return false;
     }
 
-    seaf_ext_log("the file [%s] cached = %s", path.c_str(), cached ? "yes" : "no");
     return cached;
 }
 
@@ -119,7 +118,6 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
     } else if (isFileCached(current_file_)) {
         return extractWithGDI(utils::utf8ToWString(current_file_), phbmp);
     } else {
-        seaf_ext_log("file %s is not cached", current_file_.c_str());
         std::string png_path;
         seafile::FetchThumbnailCommand fetch_thumbnail_cmd(current_file_);
         if (!fetch_thumbnail_cmd.sendAndWait(&png_path) || png_path.empty()) {
@@ -149,7 +147,6 @@ private:
 
 HRESULT SeadriveThumbnailProvider::extractWithGDI(LPCWSTR wpath, HBITMAP* hbmap)
 {
-    seaf_ext_log("extracting with GDI: %s", utils::wStringToUtf8(wpath).c_str());
     GDIResource resource;
     std::unique_ptr<gdi::Bitmap> bitmap(gdi::Bitmap::FromFile(wpath));
     if (!bitmap) {

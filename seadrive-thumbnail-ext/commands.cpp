@@ -7,7 +7,7 @@
 namespace seafile {
 
 GetCachedStatusCommand::GetCachedStatusCommand(const std::string &path)
-    : SeaDriveCommand<bool>("get-cached-status"),
+    : SeaDriveCommand<bool>("is-file-cached"),
     path_(path)
 {
 }
@@ -34,10 +34,10 @@ bool GetCachedStatusCommand::parseDriveResponse(const std::string& raw_resp,
 }
 
 /**
- * Get seadrive mount diskletter
+ * Get seadrive mount point
  */
 GetSeadriveMountLetterCommand::GetSeadriveMountLetterCommand()
-    : SeaDriveCommand <std::string>("get-disk-letter")
+    : SeaDriveCommand <std::string>("get-mount-point")
 {
 }
 
