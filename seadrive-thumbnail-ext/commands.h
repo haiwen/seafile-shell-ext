@@ -40,16 +40,6 @@ private:
     std::string path_;
 };
 
-class GetSeadriveMountLetterCommand : public SeaDriveCommand <std::string> {
-public:
-    GetSeadriveMountLetterCommand();
-protected:
-    std::string serialize();
-    std::string serializeForDrive();
-    bool parseDriveResponse(const std::string& raw_resp,
-        std::string* letter);
-};
-
 class FetchThumbnailCommand : public SeaDriveCommand <std::string> {
 public:
     FetchThumbnailCommand(const std::string &path);
