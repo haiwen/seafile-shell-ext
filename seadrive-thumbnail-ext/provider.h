@@ -28,9 +28,6 @@ public:
 
     SeadriveThumbnailProvider();
 
-    static std::unique_ptr<std::string> disk_letter_cache_;
-    static seafile::utils::Mutex disk_letter_cache_mutex_;
-
 protected:
     ~SeadriveThumbnailProvider();
 

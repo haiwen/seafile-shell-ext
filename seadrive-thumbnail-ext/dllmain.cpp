@@ -14,6 +14,11 @@
 const CLSID CLSID_SeadriveThumbnailProvider =
 { 0xAD201912, 0xA383, 0x4CB1, {0x96, 0x54, 0xF2, 0xFC, 0x32, 0xEA, 0x00, 0x00}};
 
+// GUID for extension appid.
+// {7AF9D9DB-4805-4F04-BCA4-BA3F0BC0D7CD}
+const CLSID CLSID_SeadriveExtensionAppID =
+{ 0x7AF9D9DB, 0x4805, 0x4F04, {0xBC, 0xA4, 0xBA, 0x3F, 0x0B, 0xC0, 0xD7, 0xCD}};
+
 HINSTANCE   g_hmodThisDll     = NULL;
 long        g_cDllRef   = 0;
 
@@ -91,7 +96,7 @@ STDAPI DllCanUnloadNow(void)
 STDAPI DllRegisterServer(void)
 {
     seaf_ext_log("register dll server");
-    HRESULT hr;
+    HRESULT hr = S_OK;
 
     wchar_t szModule[MAX_PATH];
     if (GetModuleFileName(g_hmodThisDll, szModule, ARRAYSIZE(szModule)) == 0)
@@ -100,17 +105,23 @@ STDAPI DllRegisterServer(void)
         return hr;
     }
 
-    // Register the component.
-    hr = RegisterInprocServer(szModule, CLSID_SeadriveThumbnailProvider,
-        L"CppShellExtThumbnailHandler.SeadriveThumbnailProvider Class",
-        L"Apartment");
-
-    if (SUCCEEDED(hr))
-    {
-        // This tells the shell to invalidate the thumbnail cache. It is
-        // important because any .recipe files viewed before registering
-        // this handler would otherwise show cached blank thumbnails.
-        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+    char buf[MAX_PATH] = {'\0'};
+    GetEnvironmentVariableA("SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
+    // When installing seadrive, InprocServer will be registered, so only when debugging, register it when registing dll.
+    if (buf[0] != '\0') {
+        // Register the extension appid.
+        hr = RegisterShellApp(CLSID_SeadriveExtensionAppID, L"SeaDrive Shell Extensions");
+        if (!SUCCEEDED(hr)) {
+            return hr;
+        }
+        // Register the component.
+        hr = RegisterInprocServer(szModule, CLSID_SeadriveThumbnailProvider,
+                                  CLSID_SeadriveExtensionAppID,
+                                  L"CppShellExtThumbnailHandler.SeadriveThumbnailProvider Class",
+                                  L"Apartment");
+        if (SUCCEEDED(hr)) {
+            SHChangeNotify (SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+        }
     }
 
     return hr;
@@ -134,8 +145,16 @@ STDAPI DllUnregisterServer(void)
         return hr;
     }
 
-    // Unregister the component.
-    hr = UnregisterInprocServer(CLSID_SeadriveThumbnailProvider);
+    char buf[MAX_PATH] = {'\0'};
+    GetEnvironmentVariableA("SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
+    if (buf[0] != '\0') {
+        // Unregister the component.
+        hr = UnregisterShellApp(CLSID_SeadriveExtensionAppID);
+        if (!SUCCEEDED(hr)) {
+            return hr;
+        }
+        hr = UnregisterInprocServer(CLSID_SeadriveThumbnailProvider);
+    }
 
     return hr;
 }

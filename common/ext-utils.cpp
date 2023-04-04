@@ -552,15 +552,5 @@ std::string getLocalPipeName(const char *pipe_name)
     }
 }
 
-std::string diskLetterFromPath(const std::string& path)
-{
-    int ord = PathGetDriveNumberA(path.c_str());
-    if (ord < 0) {
-        return "";
-    }
-    std::string letter({(char)('a' + (char)ord)});
-    return letter + ":";
-}
-
 } // namespace utils
 } // namespace seafile

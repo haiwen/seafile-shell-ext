@@ -18,9 +18,6 @@ namespace gdi = Gdiplus;
 extern HINSTANCE g_hmodThisDll;
 extern long g_cDllRef;
 
-std::unique_ptr<std::string> SeadriveThumbnailProvider::disk_letter_cache_;
-utils::Mutex SeadriveThumbnailProvider::disk_letter_cache_mutex_;
-
 SeadriveThumbnailProvider::SeadriveThumbnailProvider() : m_cRef(1)
 {
     InterlockedIncrement(&g_cDllRef);
@@ -119,7 +116,7 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
         return extractWithGDI(utils::utf8ToWString(current_file_), phbmp);
     } else {
         std::string png_path;
-        seafile::FetchThumbnailCommand fetch_thumbnail_cmd(current_file_);
+        seafile::FetchThumbnailCommand fetch_thumbnail_cmd(current_file_, cx);
         if (!fetch_thumbnail_cmd.sendAndWait(&png_path) || png_path.empty()) {
             seaf_ext_log("send get thumbnail commmand failed");
             return E_FAIL;

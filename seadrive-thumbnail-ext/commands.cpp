@@ -34,14 +34,17 @@ bool GetCachedStatusCommand::parseDriveResponse(const std::string& raw_resp,
 }
 
 // Get thumbnail from server command
-FetchThumbnailCommand::FetchThumbnailCommand(const std::string &path)
+FetchThumbnailCommand::FetchThumbnailCommand(const std::string &path, UINT cx)
     : SeaDriveCommand <std::string>("get-thumbnail-from-server"),
-     path_(path)
+     path_(path),
+     cx_(cx)
 {
 }
 
 std::string FetchThumbnailCommand::serialize() {
-    return path_;
+    char buf[4096 + 64];
+    snprintf (buf, sizeof(buf), "%s\t%s", path_.c_str(), std::to_string(cx_));
+    return buf;
 }
 
 std::string FetchThumbnailCommand::serializeForDrive() {

@@ -69,8 +69,6 @@ bool isShellExtEnabled();
 
 std::string getLocalPipeName(const char *pipeName);
 
-std::string diskLetterFromPath(const std::string& path);
-
 } // namespace utils
 } // namespace seafile
 

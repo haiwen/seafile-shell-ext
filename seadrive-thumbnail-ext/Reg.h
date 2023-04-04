@@ -30,7 +30,7 @@
 //      }
 //   }
 //
-HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
+HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid, const CLSID& appid,
     PCWSTR pszFriendlyName, PCWSTR pszThreadModel);
 
 
@@ -88,3 +88,23 @@ HRESULT RegisterShellExtThumbnailHandler(PCWSTR pszFileType, const CLSID& clsid)
 //   HKCR\<File Type>\shellex\{e357fccd-a995-4576-b01f-234630154e96}.
 //
 HRESULT UnregisterShellExtThumbnailHandler(PCWSTR pszFileType);
+
+//
+//   FUNCTION: RegisterShellApp
+//
+//   PURPOSE: Register the seadrive shell extension app in the registry.
+//
+//   PARAMETERS:
+//   * clsid - Class ID of the seadrive shell extension
+//   * pszFriendlyName - Friendly name
+HRESULT RegisterShellApp(const CLSID &clsid, PCWSTR pszFriendlyName);
+
+//
+//   FUNCTION: UnregisterShellApp
+//
+//   PURPOSE: Unegister the seadrive shell app in the registry.
+//
+//   PARAMETERS:
+//   * clsid - Class ID of the component
+//
+HRESULT UnregisterShellApp(const CLSID &clsid);

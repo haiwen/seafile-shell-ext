@@ -42,7 +42,7 @@ private:
 
 class FetchThumbnailCommand : public SeaDriveCommand <std::string> {
 public:
-    FetchThumbnailCommand(const std::string &path);
+    FetchThumbnailCommand(const std::string &path, UINT cx);
 protected:
     std::string serialize();
     std::string serializeForDrive();
@@ -50,6 +50,7 @@ protected:
 
 private:
     std::string path_;
+    UINT cx_;
 };
 
 } // namespace seafile

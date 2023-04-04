@@ -121,7 +121,7 @@ HRESULT GetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
 //      }
 //   }
 //
-HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
+HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid, const CLSID& appid,
     PCWSTR pszFriendlyName, PCWSTR pszThreadModel)
 {
     if (pszModule == NULL || pszThreadModel == NULL) {
@@ -132,6 +132,8 @@ HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
 
     wchar_t szCLSID[MAX_PATH];
     StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID));
+    wchar_t appCLSID[MAX_PATH];
+    StringFromGUID2(appid, appCLSID, ARRAYSIZE(appCLSID));
 
     wchar_t szSubkey[MAX_PATH];
 
@@ -142,8 +144,7 @@ HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
 
         // Create the HKCR\CLSID\{<CLSID>}\InprocServer32 key.
         if (SUCCEEDED(hr)) {
-            WCHAR data[4] = { 0x01, 0x00, 0x00, 0x00 };
-            SetHKCRRegistryKeyAndValue(szSubkey, L"DisableProcessIsolation", data, REG_DWORD);
+            SetHKCRRegistryKeyAndValue(szSubkey, L"AppID", appCLSID, REG_SZ);
 
             hr = StringCchPrintf(szSubkey, ARRAYSIZE(szSubkey),
                 L"CLSID\\%s\\InprocServer32", szCLSID);
@@ -306,4 +307,58 @@ HRESULT UnregisterShellExtThumbnailHandler(PCWSTR pszFileType)
 
     return hr;
 
+}
+
+//
+//   FUNCTION: RegisterShellApp
+//
+//   PURPOSE: Register the seadrive shell extension app in the registry.
+//
+//   PARAMETERS:
+//   * clsid - Class ID of the seadrive shell extension
+//   * pszFriendlyName - Friendly name
+HRESULT RegisterShellApp(const CLSID& clsid, PCWSTR pszFriendlyName)
+{
+    HRESULT hr;
+
+    wchar_t szCLSID[MAX_PATH];
+    StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID));
+
+    wchar_t szSubkey[MAX_PATH];
+
+    hr = StringCchPrintf(szSubkey, ARRAYSIZE(szSubkey), L"AppID\\%s", szCLSID);
+    if (SUCCEEDED(hr)) {
+        hr = SetHKCRRegistryKeyAndValue(szSubkey, NULL, pszFriendlyName, REG_SZ);
+
+        if (SUCCEEDED(hr)) {
+            hr = SetHKCRRegistryKeyAndValue(szSubkey, L"DllSurrogate", L"", REG_SZ);
+        }
+    }
+
+    return hr;
+}
+
+//
+//   FUNCTION: UnregisterShellApp
+//
+//   PURPOSE: Unegister the seadrive shell app in the registry.
+//
+//   PARAMETERS:
+//   * clsid - Class ID of the component
+//
+HRESULT UnregisterShellApp(const CLSID& clsid)
+{
+    HRESULT hr = S_OK;
+
+    wchar_t szCLSID[MAX_PATH];
+    StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID));
+
+    wchar_t szSubkey[MAX_PATH];
+
+    hr = StringCchPrintf(szSubkey, ARRAYSIZE(szSubkey), L"AppID\\%s", szCLSID);
+    if (SUCCEEDED(hr)) {
+        hr = HRESULT_FROM_WIN32(RegDeleteTree(HKEY_CLASSES_ROOT, szSubkey));
+    }
+
+    return hr;
 }
