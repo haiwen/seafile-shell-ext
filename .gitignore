@@ -105,5 +105,3 @@ seafile-applet.rc
 
 # vs
 extensions/seafile_ext.vcxproj.user
-*.vcxproj
-*.vcxproj.filters

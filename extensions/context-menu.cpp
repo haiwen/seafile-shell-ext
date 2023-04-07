@@ -26,8 +26,8 @@ bool shouldIgnorePath(const std::string& path)
     return FALSE;
 }
 
-const char *kMainMenuNameSeafile = "Seafile";
-const char *kMainMenuNameSeaDrive = "SeaDrive";
+const wchar_t *kMainMenuNameSeafile = L"Seafile";
+const wchar_t *kMainMenuNameSeaDrive = L"SeaDrive";
 
 }
 
@@ -278,10 +278,10 @@ STDMETHODIMP ShellExt::HandleMenuMsg2_Wrap(UINT uMsg, WPARAM wParam, LPARAM lPar
 /**
  * Add two menu seperators, with seafile menu between them
  */
-bool ShellExt::insertMainMenu(const char* main_menu_name)
+bool ShellExt::insertMainMenu(const wchar_t* main_menu_name)
 {
     // Insert a seperate before seafile menu
-    if (!InsertMenu(main_menu_, index_++, MF_BYPOSITION |MF_SEPARATOR, 0, ""))
+    if (!InsertMenu(main_menu_, index_++, MF_BYPOSITION |MF_SEPARATOR, 0, L""))
         return FALSE;
 
     MENUITEMINFO menuiteminfo;
@@ -289,8 +289,8 @@ bool ShellExt::insertMainMenu(const char* main_menu_name)
     menuiteminfo.cbSize = sizeof(menuiteminfo);
     menuiteminfo.fMask = MIIM_FTYPE | MIIM_SUBMENU | MIIM_STRING | MIIM_ID;
     menuiteminfo.fType = MFT_STRING;
-    menuiteminfo.dwTypeData = (char*)main_menu_name;
-    menuiteminfo.cch = strlen(main_menu_name);
+    menuiteminfo.dwTypeData = (wchar_t *)main_menu_name;
+    menuiteminfo.cch = wcslen(main_menu_name);
     // menuiteminfo.hbmpItem = HBMMENU_CALLBACK;
     menuiteminfo.hSubMenu = sub_menu_;
     menuiteminfo.wID = first_;
@@ -299,7 +299,7 @@ bool ShellExt::insertMainMenu(const char* main_menu_name)
         return FALSE;
 
     // Insert a seperate after seafile menu
-    if (!InsertMenu(main_menu_, index_++, MF_BYPOSITION |MF_SEPARATOR, 0, ""))
+    if (!InsertMenu(main_menu_, index_++, MF_BYPOSITION |MF_SEPARATOR, 0, L""))
         return FALSE;
 
     /* Set menu styles of submenu */
@@ -312,12 +312,13 @@ MENUITEMINFO
 ShellExt::createMenuItem(const std::string& text)
 {
     MENUITEMINFO minfo;
+    wchar_t *text_w = utils::utf8ToWString(text);
     memset(&minfo, 0, sizeof(minfo));
     minfo.cbSize = sizeof(MENUITEMINFO);
     minfo.fMask = MIIM_FTYPE | MIIM_BITMAP | MIIM_STRING | MIIM_ID;
     minfo.fType = MFT_STRING;
-    minfo.dwTypeData = (char *)text.c_str();
-    minfo.cch = text.size();
+    minfo.dwTypeData = text_w;
+    minfo.cch = wcslen(text_w);
     minfo.hbmpItem = HBMMENU_CALLBACK;
     minfo.wID = first_ + 1 + next_active_item_++;
 
@@ -332,6 +333,7 @@ void ShellExt::insertSubMenuItem(const std::string& text, MenuOp op)
                     index_++,  /* position */
                     TRUE,      /* by position */
                     &minfo);
+    free (minfo.dwTypeData);
     active_menu_items_.push_back(op);
 }
 

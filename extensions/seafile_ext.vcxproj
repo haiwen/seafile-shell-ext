@@ -124,8 +124,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;SEAFILEEXT_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)../common;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,11 +140,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;SEAFILEEXT_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;SEAFILEEXT_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../common;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,27 +158,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="applet-connection.h" />
+    <ClInclude Include="..\common\applet-connection.h" />
+    <ClInclude Include="..\common\commands-base.h" />
+    <ClInclude Include="..\common\ext-common.h" />
+    <ClInclude Include="..\common\ext-config.h" />
+    <ClInclude Include="..\common\ext-utils.h" />
+    <ClInclude Include="..\common\log.h" />
     <ClInclude Include="class-factory.h" />
     <ClInclude Include="commands.h" />
-    <ClInclude Include="ext-common.h" />
-    <ClInclude Include="ext-utils.h" />
     <ClInclude Include="guids.h" />
     <ClInclude Include="i18n.h" />
-    <ClInclude Include="log.h" />
     <ClInclude Include="repo-info.h" />
     <ClInclude Include="shell-ext.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="applet-connection.cpp" />
+    <ClCompile Include="..\common\applet-connection.cpp" />
+    <ClCompile Include="..\common\ext-utils.cpp" />
+    <ClCompile Include="..\common\log.cpp" />
     <ClCompile Include="class-factory.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="context-menu.cpp" />
     <ClCompile Include="dll.cpp" />
-    <ClCompile Include="ext-utils.cpp" />
+    <ClCompile Include="ext-config.cpp" />
     <ClCompile Include="i18n.cpp" />
     <ClCompile Include="icon-overlay.cpp" />
-    <ClCompile Include="log.cpp" />
     <ClCompile Include="repo-info.cpp" />
     <ClCompile Include="shell-ext.cpp" />
   </ItemGroup>

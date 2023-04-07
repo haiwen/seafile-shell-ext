@@ -88,49 +88,48 @@ MutexLocker::~MutexLocker()
     mu_->unlock();
 }
 
-
-void regulatePath(char *p)
+void regulatePath(wchar_t *p)
 {
     if (!p)
         return;
 
-    char *s = p;
+    wchar_t *s = p;
     /* Use capitalized C/D/E, etc. */
-    if (s[0] >= 'a')
+    if (s[0] >= L'a')
         s[0] = toupper(s[0]);
 
     /* Use / instead of \ */
     while (*s) {
-        if (*s == '\\')
-            *s = '/';
+        if (*s == L'\\')
+            *s = L'/';
         s++;
     }
 
     s--;
     /* strip trailing white spaces and path seperator */
-    while (isspace(*s) || *s == '/') {
-        *s = '\0';
+    while (isspace(*s) || *s == L'/') {
+        *s = L'\0';
         s--;
     }
 }
 
 std::string getHomeDir()
 {
-    static char *home;
+    static wchar_t *home;
 
     if (home)
-        return home;
+        return utils::wStringToUtf8 (home);
 
-    char buf[MAX_PATH] = {'\0'};
+    wchar_t buf[MAX_PATH] = {'\0'};
 
     if (!home) {
         /* Try env variable first. */
-        GetEnvironmentVariableA("USERPROFILE", buf, MAX_PATH);
-        if (buf[0] != '\0')
+        GetEnvironmentVariableW(L"USERPROFILE", buf, MAX_PATH);
+        if (wcslen(buf) != 0)
 #if defined(_MSC_VER)
-            home = _strdup(buf);
+            home = _wcsdup(buf);
 #else
-            home = strdup(buf);
+            home = wcsdup(buf);
 #endif
     }
 
@@ -139,20 +138,22 @@ std::string getHomeDir()
         HANDLE hToken = NULL;
         DWORD len = MAX_PATH;
         if (OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-            GetUserProfileDirectoryA(hToken, buf, &len);
+            GetUserProfileDirectoryW(hToken, buf, &len);
             CloseHandle(hToken);
-            if (buf[0] != '\0')
+            if (wcslen(buf) != 0)
 #if defined(_MSC_VER)
-                home = _strdup(buf);
+                home = _wcsdup(buf);
 #else
-                home = strdup(buf);
+                home = wcsdup(buf);
 #endif
         }
     }
 
-    if (home)
+    if (home) {
         regulatePath(home);
-    return home ? home : "";
+    }
+
+    return home ? utils::wStringToUtf8(home):"";
 }
 
 bool
@@ -272,15 +273,15 @@ std::string formatErrorMessage()
     if (error_code == 0) {
         return "no error";
     }
-    char buf[256] = {0};
-    ::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,
+    wchar_t buf[256] = {0};
+    ::FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     error_code,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                     buf,
-                    sizeof(buf) - 1,
+                    wcslen(buf) - 1,
                     NULL);
-    return buf;
+    return utils::wStringToUtf8(buf);
 }
 
 std::vector<std::string> split(const std::string &s, char delim)
@@ -371,19 +372,17 @@ std::string getBaseName(const std::string& path)
 
 std::string getThisDllPath()
 {
-    static char module_filename[MAX_PATH] = { 0 };
+    static wchar_t module_filename[MAX_PATH] = { 0 };
 
-    if (module_filename[0] == '\0') {
+    if (wcslen(module_filename) == 0) {
         DWORD module_size;
-        module_size = GetModuleFileNameA(
+        module_size = GetModuleFileNameW(
             g_hmodThisDll, module_filename, MAX_PATH);
         if (!module_size)
             return "";
-
-        normalizedPath(module_filename);
     }
 
-    return module_filename;
+    return normalizedPath(utils::wStringToUtf8(module_filename));
 }
 
 std::string getThisDllFolder()

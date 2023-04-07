@@ -28,7 +28,7 @@ public:
     bool sendCommandAndWait(const std::string& data, std::string *resp);
 
 private:
-    AppletConnection(const char* pipe_name);
+    AppletConnection(const wchar_t* pipe_name);
     bool connect();
     bool readResponse(std::string *out);
     bool writeRequest(const std::string& cmd);
@@ -45,7 +45,7 @@ private:
     static AppletConnection *drive_singleton_;
 
     bool connected_;
-    const char *pipe_name_;
+    const wchar_t *pipe_name_;
     HANDLE pipe_;
 
     uint64_t last_conn_failure_;

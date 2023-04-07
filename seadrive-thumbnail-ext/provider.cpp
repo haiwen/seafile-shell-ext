@@ -69,6 +69,8 @@ IFACEMETHODIMP SeadriveThumbnailProvider::Initialize(_In_ IShellItem *item, DWOR
         return hresult;
     }
     current_file_ = utils::normalizedPath(utils::wStringToUtf8(pszName));
+    if (pszName)
+        CoTaskMemFree (pszName);
     return S_OK;
 }
 
@@ -110,10 +112,14 @@ bool SeadriveThumbnailProvider::isImage (const std::string& path)
 IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
     WTS_ALPHATYPE *pdwAlpha)
 {
+    HRESULT hresult;
     if (!isImage (current_file_)) {
         return E_FAIL;
     } else if (isFileCached(current_file_)) {
-        return extractWithGDI(utils::utf8ToWString(current_file_), phbmp);
+        wchar_t *file_w = utils::utf8ToWString(current_file_);
+        hresult = extractWithGDI(file_w, phbmp);
+        free (file_w);
+        return hresult;
     } else {
         std::string png_path;
         seafile::FetchThumbnailCommand fetch_thumbnail_cmd(current_file_, cx);
@@ -122,7 +128,10 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
             return E_FAIL;
         }
 
-        return extractWithGDI(utils::utf8ToWString(png_path), phbmp);
+        wchar_t *png_path_w = utils::utf8ToWString(png_path);
+        hresult = extractWithGDI(png_path_w, phbmp);
+        free (png_path_w);
+        return hresult;
     }
 }
 

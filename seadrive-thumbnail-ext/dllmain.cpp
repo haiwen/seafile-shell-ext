@@ -105,10 +105,10 @@ STDAPI DllRegisterServer(void)
         return hr;
     }
 
-    char buf[MAX_PATH] = {'\0'};
-    GetEnvironmentVariableA("SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
+    wchar_t buf[MAX_PATH] = {'\0'};
+    GetEnvironmentVariableW(L"SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
     // When installing seadrive, InprocServer will be registered, so only when debugging, register it when registing dll.
-    if (buf[0] != '\0') {
+    if (wcslen(buf) != 0) {
         // Register the extension appid.
         hr = RegisterShellApp(CLSID_SeadriveExtensionAppID, L"SeaDrive Shell Extensions");
         if (!SUCCEEDED(hr)) {
@@ -145,9 +145,9 @@ STDAPI DllUnregisterServer(void)
         return hr;
     }
 
-    char buf[MAX_PATH] = {'\0'};
-    GetEnvironmentVariableA("SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
-    if (buf[0] != '\0') {
+    wchar_t buf[MAX_PATH] = {'\0'};
+    GetEnvironmentVariableW(L"SEADRIVE_EXT_DEBUG", buf, MAX_PATH);
+    if (wcslen(buf) != 0) {
         // Unregister the component.
         hr = UnregisterShellApp(CLSID_SeadriveExtensionAppID);
         if (!SUCCEEDED(hr)) {
