@@ -24,10 +24,10 @@ protected:
     }
 };
 
-class GetCachedStatusCommand : public SeaDriveCommand <bool> {
+class IsFileCachedCommand : public SeaDriveCommand <bool> {
 
 public:
-    GetCachedStatusCommand(const std::string &path);
+    IsFileCachedCommand(const std::string &path);
 
 protected:
     std::string serialize();

@@ -75,10 +75,10 @@ IFACEMETHODIMP SeadriveThumbnailProvider::Initialize(_In_ IShellItem *item, DWOR
 bool SeadriveThumbnailProvider::isFileCached(const std::string& path)
 {
     // Get file cache status
-    seafile::GetCachedStatusCommand cache_status_cmd(path);
+    seafile::IsFileCachedCommand is_cached_cmd(path);
 
     bool cached;
-    if (!cache_status_cmd.sendAndWait(&cached)) {
+    if (!is_cached_cmd.sendAndWait(&cached)) {
         seaf_ext_log("send get file cached status failed");
         return false;
     }

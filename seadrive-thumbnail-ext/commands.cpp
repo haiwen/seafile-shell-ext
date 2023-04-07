@@ -6,23 +6,23 @@
 
 namespace seafile {
 
-GetCachedStatusCommand::GetCachedStatusCommand(const std::string &path)
+IsFileCachedCommand::IsFileCachedCommand(const std::string &path)
     : SeaDriveCommand<bool>("is-file-cached"),
     path_(path)
 {
 }
 
-std::string GetCachedStatusCommand::serialize()
+std::string IsFileCachedCommand::serialize()
 {
     return path_;
 }
 
-std::string GetCachedStatusCommand::serializeForDrive()
+std::string IsFileCachedCommand::serializeForDrive()
 {
     return serialize();
 }
 
-bool GetCachedStatusCommand::parseDriveResponse(const std::string& raw_resp,
+bool IsFileCachedCommand::parseDriveResponse(const std::string& raw_resp,
                                                 bool *status)
 {
     if (raw_resp == "cached") {
