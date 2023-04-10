@@ -392,53 +392,6 @@ std::string getThisDllFolder()
     return dll.empty() ? "" : getParentPath(dll);
 }
 
-wchar_t *localeToWString(const std::string& src)
-{
-    wchar_t dst[4096];
-    int len;
-
-    len = MultiByteToWideChar
-        (CP_ACP,                /* multibyte code page */
-         0,                     /* flags */
-         src.c_str(),           /* src */
-         -1,                    /* src len, -1 for all includes \0 */
-         dst,                   /* dst */
-         sizeof(dst) / sizeof(wchar_t));          /* dst buf len */
-
-    if (len <= 0) {
-        return NULL;
-    }
-
-#if defined(_MSC_VER)
-    return _wcsdup(dst);
-#else
-    return wcsdup(dst);
-#endif
-}
-
-
-std::string wStringToLocale(const wchar_t *src)
-{
-    char dst[4096];
-    int len;
-
-    len = WideCharToMultiByte
-        (CP_ACP,        /* multibyte code page */
-         0,             /* flags */
-         src,           /* src */
-         -1,            /* src len, -1 for all includes \0 */
-         dst,           /* dst */
-         sizeof(dst),   /* dst buf len */
-         NULL,          /* default char */
-         NULL);         /* BOOL flag indicates default char is used */
-
-    if (len <= 0) {
-        return "";
-    }
-
-    return dst;
-}
-
 std::string wStringToUtf8(const wchar_t *src)
 {
     char dst[4096];
@@ -492,7 +445,7 @@ bool isShellExtEnabled()
     // that.
     HKEY root = HKEY_CURRENT_USER;
     HKEY parent_key;
-    wchar_t *software_seafile = localeToWString("Software\\Seafile");
+    wchar_t *software_seafile = utf8ToWString("Software\\Seafile");
     LONG result = RegOpenKeyExW(root,
                                 software_seafile,
                                 0L,
@@ -505,7 +458,7 @@ bool isShellExtEnabled()
 
     char buf[MAX_PATH] = {0};
     DWORD len = sizeof(buf);
-    wchar_t *shell_ext_disabled = localeToWString("ShellExtDisabled");
+    wchar_t *shell_ext_disabled = utf8ToWString("ShellExtDisabled");
     result = RegQueryValueExW (parent_key,
                                shell_ext_disabled,
                                NULL,             /* reserved */

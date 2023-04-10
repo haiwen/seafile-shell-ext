@@ -5,6 +5,8 @@
 #include <map>
 #include <memory>
 
+namespace utils = seafile::utils;
+
 using std::string;
 
 namespace {
@@ -12,14 +14,14 @@ namespace {
 string getWin32Locale()
 {
   LCID lcid;
-  char iso639[10];
+  wchar_t iso639[10];
 
   lcid = GetThreadLocale ();
 
   if (!GetLocaleInfo (lcid, LOCALE_SISO639LANGNAME, iso639, sizeof (iso639)))
       return "C";
 
-  return iso639;
+  return utils::wStringToUtf8 (iso639);
 }
 
 class I18NHelper {
@@ -116,8 +118,7 @@ namespace seafile {
 string getString(const string& src)
 {
     string value = I18NHelper::instance()->getString(src);
-    std::unique_ptr<wchar_t[]> value_w(utils::utf8ToWString(value));
-    return utils::wStringToLocale(value_w.get());
+    return value;
 }
 
 }

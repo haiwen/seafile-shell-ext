@@ -15,11 +15,9 @@ namespace utils = seafile::utils;
 
 STDMETHODIMP ShellExt::GetOverlayInfo(LPWSTR pwszIconFile, int cchMax, int* pIndex, DWORD* pdwFlags)
 {
-    // seaf_ext_log ("GetOverlayInfo called for icon type %d!", (int)status_);
-
     std::string dll = utils::getThisDllPath();
 
-    std::unique_ptr<wchar_t[]> ico(utils::localeToWString(dll));
+    std::unique_ptr<wchar_t[]> ico(utils::utf8ToWString(dll));
     int wlen = wcslen(ico.get());
     if (wlen + 1 > cchMax)
         return S_FALSE;
@@ -60,9 +58,6 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
         return S_FALSE;
     }
 
-    // seaf_ext_log ("IsMemberOf called for %s, is dir: %s", path.c_str(),
-    //               (attr & FILE_ATTRIBUTE_DIRECTORY) ? "yes": "no");
-
     /* If length of path is shorter than 3, it should be a drive path,
      * such as C:\ , which should not be a repo folder ; And the
      * current folder being displayed must be "My Computer". If we
@@ -72,50 +67,29 @@ STDMETHODIMP ShellExt::IsMemberOf(LPCWSTR path_w, DWORD attr)
         return S_FALSE;
     }
 
-    // if (access(path.c_str(), F_OK) < 0 ||
-    //     !(GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY)) {
-    //     return S_FALSE;
-    // }
-
     std::string path_in_repo;
     seafile::RepoInfo repo;
-    bool is_category_dir = isSeaDriveCategoryDir(path);
-    if (!is_category_dir && !pathInRepo(path, &path_in_repo, &repo)) {
-        // seaf_ext_log ("pathInRepo returns false for %s\n", path.c_str());
+    bool is_seadrive_category_dir = isSeaDriveCategoryDir(path);
+    if (!is_seadrive_category_dir && !pathInRepo(path, &path_in_repo, &repo)) {
         return S_FALSE;
-    } else if (is_category_dir) {
+    } else if (is_seadrive_category_dir) {
         // seadrive 2x, not use icon overlay
         return S_FALSE;
     }
-
-    // seaf_ext_log ("path in repo: %s\n", path_in_repo.c_str());
 
     if (path_in_repo.size() <= 1) {
         // it's a repo top folder
         path_in_repo = "";
     }
 
-    // Now we know it's a file inside the repo
-
-    // TODO: Improve this if we later make the extension<->applet communication full duplex
-    // if (repo.status == seafile::Paused) {
-    //     return S_FALSE;
-    // }
-
-    // if (repo.status == seafile::Synced && repo.status == status_) {
-    //     return S_OK;
-    // }
-
     // Then check the file status.
     seafile::SyncStatus status = getRepoSyncStatus(
             path, repo.repo_id, path_in_repo, attr & FILE_ATTRIBUTE_DIRECTORY);
-    // seaf_ext_log ("file = %s, status = %s", path.c_str(), toString(status).c_str());
 
     if (status == seafile::Paused && !path_in_repo.empty()) {
         return S_FALSE;
     }
     if (status == status_ || (status_ == seafile::Paused && status == seafile::ReadOnly)) {
-        // seaf_ext_log ("[ICON] file icon %s: %s", toString(status_).c_str(), path.c_str());
         return S_OK;
     }
 
