@@ -15,19 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="applet-connection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="class-factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commands.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ext-common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ext-utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="guids.h">
@@ -36,20 +27,32 @@
     <ClInclude Include="i18n.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="repo-info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shell-ext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\applet-connection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\commands-base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ext-common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ext-config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ext-utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="applet-connection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="class-factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,22 +65,28 @@
     <ClCompile Include="dll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ext-utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="i18n.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="icon-overlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="repo-info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shell-ext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\applet-connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\ext-utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ext-config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -228,14 +228,11 @@ ShellExt::getRepoSyncStatus(const std::string& _path,
 bool
 ShellExt::isSeaDriveCategoryDir(const std::string &path)
 {
-    // seaf_ext_log ("1x isSeaDriveCategoryDir: path = %s, drive_letter_ = %s", path.c_str(), drive_letter_.c_str());
     seafile::RepoInfoList repos;
     getReposList(&repos);
     if (drive_letter_.empty()) {
-        // seaf_ext_log ("0x isSeaDriveCategoryDir: path = %s, drive_letter_ is empty", path.c_str());
         return false;
     }
-    // seaf_ext_log ("2x isSeaDriveCategoryDir: path = %s, drive_letter_ = %s", path.c_str(), drive_letter_.c_str());
 
     std::string p = utils::normalizedPath(path);
     return p.size() > drive_letter_.size() &&

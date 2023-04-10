@@ -14,11 +14,10 @@
 
 #include "log.h"
 #include "ext-utils.h"
-#include "shell-ext.h"
+
+extern HINSTANCE g_hmodThisDll;
 
 namespace {
-
-const int kPipeWaitTimeMSec = 1000;
 
 class OverLappedWrapper
 {
@@ -89,49 +88,48 @@ MutexLocker::~MutexLocker()
     mu_->unlock();
 }
 
-
-void regulatePath(char *p)
+void regulatePath(wchar_t *p)
 {
     if (!p)
         return;
 
-    char *s = p;
+    wchar_t *s = p;
     /* Use capitalized C/D/E, etc. */
-    if (s[0] >= 'a')
+    if (s[0] >= L'a')
         s[0] = toupper(s[0]);
 
     /* Use / instead of \ */
     while (*s) {
-        if (*s == '\\')
-            *s = '/';
+        if (*s == L'\\')
+            *s = L'/';
         s++;
     }
 
     s--;
     /* strip trailing white spaces and path seperator */
-    while (isspace(*s) || *s == '/') {
-        *s = '\0';
+    while (isspace(*s) || *s == L'/') {
+        *s = L'\0';
         s--;
     }
 }
 
 std::string getHomeDir()
 {
-    static char *home;
+    static wchar_t *home;
 
     if (home)
-        return home;
+        return utils::wStringToUtf8 (home);
 
-    char buf[MAX_PATH] = {'\0'};
+    wchar_t buf[MAX_PATH] = {'\0'};
 
     if (!home) {
         /* Try env variable first. */
-        GetEnvironmentVariable("HOME", buf, MAX_PATH);
-        if (buf[0] != '\0')
+        GetEnvironmentVariableW(L"USERPROFILE", buf, MAX_PATH);
+        if (wcslen(buf) != 0)
 #if defined(_MSC_VER)
-            home = _strdup(buf);
+            home = _wcsdup(buf);
 #else
-            home = strdup(buf);
+            home = wcsdup(buf);
 #endif
     }
 
@@ -140,20 +138,22 @@ std::string getHomeDir()
         HANDLE hToken = NULL;
         DWORD len = MAX_PATH;
         if (OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
-            GetUserProfileDirectory (hToken, buf, &len);
+            GetUserProfileDirectoryW(hToken, buf, &len);
             CloseHandle(hToken);
-            if (buf[0] != '\0')
+            if (wcslen(buf) != 0)
 #if defined(_MSC_VER)
-                home = _strdup(buf);
+                home = _wcsdup(buf);
 #else
-                home = strdup(buf);
+                home = wcsdup(buf);
 #endif
         }
     }
 
-    if (home)
+    if (home) {
         regulatePath(home);
-    return home ? home : "";
+    }
+
+    return home ? utils::wStringToUtf8(home):"";
 }
 
 bool
@@ -273,15 +273,15 @@ std::string formatErrorMessage()
     if (error_code == 0) {
         return "no error";
     }
-    char buf[256] = {0};
-    ::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
+    wchar_t buf[256] = {0};
+    ::FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     error_code,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                     buf,
-                    sizeof(buf) - 1,
+                    wcslen(buf) - 1,
                     NULL);
-    return buf;
+    return utils::wStringToUtf8(buf);
 }
 
 std::vector<std::string> split(const std::string &s, char delim)
@@ -332,9 +332,6 @@ std::string splitPath(const std::string& path, int *pos)
     }
 
     std::string p = normalizedPath(path);
-    while (p.size() > 1 && p[-1] == '/') {
-        p = p.substr(0, p.size() - 1);
-    }
     if (p.size() == 1) {
         return p;
     }
@@ -375,19 +372,17 @@ std::string getBaseName(const std::string& path)
 
 std::string getThisDllPath()
 {
-    static char module_filename[MAX_PATH] = { 0 };
+    static wchar_t module_filename[MAX_PATH] = { 0 };
 
-    if (module_filename[0] == '\0') {
+    if (wcslen(module_filename) == 0) {
         DWORD module_size;
-        module_size = GetModuleFileName(
+        module_size = GetModuleFileNameW(
             g_hmodThisDll, module_filename, MAX_PATH);
         if (!module_size)
             return "";
-
-        normalizedPath(module_filename);
     }
 
-    return module_filename;
+    return normalizedPath(utils::wStringToUtf8(module_filename));
 }
 
 std::string getThisDllFolder()
@@ -395,53 +390,6 @@ std::string getThisDllFolder()
     std::string dll = getThisDllPath();
 
     return dll.empty() ? "" : getParentPath(dll);
-}
-
-wchar_t *localeToWString(const std::string& src)
-{
-    wchar_t dst[4096];
-    int len;
-
-    len = MultiByteToWideChar
-        (CP_ACP,                /* multibyte code page */
-         0,                     /* flags */
-         src.c_str(),           /* src */
-         -1,                    /* src len, -1 for all includes \0 */
-         dst,                   /* dst */
-         sizeof(dst) / sizeof(wchar_t));          /* dst buf len */
-
-    if (len <= 0) {
-        return NULL;
-    }
-
-#if defined(_MSC_VER)
-    return _wcsdup(dst);
-#else
-    return wcsdup(dst);
-#endif
-}
-
-
-std::string wStringToLocale(const wchar_t *src)
-{
-    char dst[4096];
-    int len;
-
-    len = WideCharToMultiByte
-        (CP_ACP,        /* multibyte code page */
-         0,             /* flags */
-         src,           /* src */
-         -1,            /* src len, -1 for all includes \0 */
-         dst,           /* dst */
-         sizeof(dst),   /* dst buf len */
-         NULL,          /* default char */
-         NULL);         /* BOOL flag indicates default char is used */
-
-    if (len <= 0) {
-        return "";
-    }
-
-    return dst;
 }
 
 std::string wStringToUtf8(const wchar_t *src)
@@ -497,7 +445,7 @@ bool isShellExtEnabled()
     // that.
     HKEY root = HKEY_CURRENT_USER;
     HKEY parent_key;
-    wchar_t *software_seafile = localeToWString("Software\\Seafile");
+    wchar_t *software_seafile = utf8ToWString("Software\\Seafile");
     LONG result = RegOpenKeyExW(root,
                                 software_seafile,
                                 0L,
@@ -510,7 +458,7 @@ bool isShellExtEnabled()
 
     char buf[MAX_PATH] = {0};
     DWORD len = sizeof(buf);
-    wchar_t *shell_ext_disabled = localeToWString("ShellExtDisabled");
+    wchar_t *shell_ext_disabled = utf8ToWString("ShellExtDisabled");
     result = RegQueryValueExW (parent_key,
                                shell_ext_disabled,
                                NULL,             /* reserved */
@@ -527,7 +475,7 @@ char *b64encode(const char *input)
 {
     char buf[32767] = {0};
     DWORD retlen = 32767;
-    CryptBinaryToString((BYTE*) input, strlen(input), CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, buf, &retlen);
+    CryptBinaryToStringA((BYTE*) input, strlen(input), CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, buf, &retlen);
 #if defined(_MSC_VER)
     return _strdup(buf);
 #else
@@ -542,7 +490,7 @@ std::string getLocalPipeName(const char *pipe_name)
 
     char user_name_buf[buf_char_count];
 
-    if (GetUserName(user_name_buf, &char_count) == 0) {
+    if (GetUserNameA(user_name_buf, &char_count) == 0) {
         seaf_ext_log ("Failed to get user name, GLE=%lu\n",
                       GetLastError());
         return pipe_name;

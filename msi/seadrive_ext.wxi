@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Include Id="SeaDriveExtInclude">
+  <?define SeaDriveExtName="SeaDriveExt" ?>
+
+  <?define APPDisplayName="SeaDrive Shell Extensions" ?>
+
+  <?define        ShellGuidSeaDriveThumbnail="AD201912-A383-4CB1-9654-F2FC32EA0000" ?>
+  <?define        ShellGuidSeaDriveAPP="7AF9D9DB-4805-4F04-BCA4-BA3F0BC0D7CD" ?>
+
+  <?define   GuidOfSeaDriveShellExtComponent="AD201912-0000-0000-0000-000000000000" ?>
+  <?define GuidOf32BitSeaDriveShellComponent="AD201912-0000-0000-0000-000000000001" ?>
+  <?define GuidOf64BitSeaDriveShellComponent="AD201912-0000-0000-0000-000000000002" ?>
+</Include>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Includes.wxi?>
+  <?include seadrive_ext.wxi?>
+  <Fragment>
+    <DirectoryRef Id="INSTALLDIR">
+      <Directory Id="seadrive_shell_bin_dir" Name="bin">
+        <Component Id="comp_seadrive_shell" Guid="$(var.GuidOf32BitSeaDriveShellComponent)" Win64="no">
+          <Condition>NOT VersionNT64</Condition>
+          <!-- Thumbnail Extension -->
+          <RegistryKey   Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" Value="$(var.APPDisplayName)" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" Name="DllSurrogate" Value="" Type="string" />
+          <RegistryKey   Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
+
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Value="[CommonAppDataFolder]$(var.SeaDriveExtName)\seadrive_ext.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
+
+
+        </Component>
+        <Component Id="comp_seadrive_shell64" Guid="$(var.GuidOf64BitSeaDriveShellComponent)" Win64="yes">
+          <Condition>VersionNT64</Condition>
+          <!-- Thumbnail Extension -->
+          <RegistryKey   Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" Value="$(var.APPDisplayName)" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" Name="DllSurrogate" Value="" Type="string" />
+          <RegistryKey   Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
+
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Value="[CommonAppDataFolder]$(var.SeaDriveExtName)\seadrive_ext64.dll" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved" Name="{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
+
+
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
