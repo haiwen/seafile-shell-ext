@@ -23,7 +23,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A004F343-55D0-392A-B445-60D4A35691C9}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>seadrive_ext</ProjectName>
@@ -165,9 +165,9 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>E:/seadrive_vs/seafile-shell-ext/seadrive-thumbnail-ext/Release/seadrive_ext.lib</ImportLibrary>
-      <ModuleDefinitionFile>E:/seadrive_vs/seafile-shell-ext/seadrive-thumbnail-ext/ExportFunctions.def</ModuleDefinitionFile>
-      <ProgramDataBaseFile>E:/seadrive_vs/seafile-shell-ext/seadrive-thumbnail-ext/Release/seadrive_ext.pdb</ProgramDataBaseFile>
+      <ImportLibrary>$(SolutionDir)Release\seadrive_ext.lib</ImportLibrary>
+      <ModuleDefinitionFile>$(SolutionDir)ExportFunctions.def</ModuleDefinitionFile>
+      <ProgramDataBaseFile>$(SolutionDir)Release\seadrive_ext.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
