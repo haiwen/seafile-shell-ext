@@ -13,6 +13,7 @@
           <RegistryValue Root="HKLM" Key="Software\Classes\AppID\{$(var.ShellGuidSeaDriveAPP)}" Name="DllSurrogate" Value="" Type="string" />
           <RegistryKey   Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" />
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" Value="$(var.SeaDriveExtName)" Type="string" />
+          <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}" Name="AppID" Value="{$(var.ShellGuidSeaDriveAPP)}" Type="string" />
 
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Name="ThreadingModel" Value="Apartment" Type="string" />
           <RegistryValue Root="HKLM" Key="Software\Classes\CLSID\{$(var.ShellGuidSeaDriveThumbnail)}\InprocServer32" Value="[CommonAppDataFolder]$(var.SeaDriveExtName)\seadrive_ext.dll" Type="string" />
