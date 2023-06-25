@@ -113,13 +113,17 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
     WTS_ALPHATYPE *pdwAlpha)
 {
     HRESULT hresult;
-    if (!isImage (current_file_)) {
+    // When the file has beed cached, use the default thumbnail handler.
+    if (isFileCached(current_file_)) {
+        IThumbnailProvider *pThumbProvider;
+        hresult = _item->BindToHandler (NULL, BHID_ThumbnailHandler, IID_PPV_ARGS(&pThumbProvider));
+        if (hresult != S_OK) {
+            seaf_ext_log ("Failed to bind to thumbnail handler\n", );
+            return hresult;
+        }
+        return pThumbProvider->GetThumbnail (cx, phbmp, pdwAlpha);
+    } else if (!isImage (current_file_)) {
         return E_FAIL;
-    } else if (isFileCached(current_file_)) {
-        wchar_t *file_w = utils::utf8ToWString(current_file_);
-        hresult = extractWithGDI(file_w, phbmp);
-        free (file_w);
-        return hresult;
     } else {
         std::string png_path;
         seafile::FetchThumbnailCommand fetch_thumbnail_cmd(current_file_, cx);
@@ -154,6 +158,7 @@ private:
 HRESULT SeadriveThumbnailProvider::extractWithGDI(LPCWSTR wpath, HBITMAP* hbmap)
 {
     GDIResource resource;
+
     std::unique_ptr<gdi::Bitmap> bitmap(gdi::Bitmap::FromFile(wpath));
     if (!bitmap) {
         seaf_ext_log("failed to load bitmap from file %s", utils::wStringToUtf8(wpath).c_str());
