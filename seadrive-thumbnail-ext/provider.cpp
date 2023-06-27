@@ -94,7 +94,9 @@ bool SeadriveThumbnailProvider::isImage (const std::string& path)
     for (int i = 0; i < ext.size(); i++) {
         ext[i] = std::tolower(ext[i]);
     }
-    if (!ext.compare ("png") || !ext.compare("jpeg") || !ext.compare("jpg")) {
+    if (!ext.compare ("png") || !ext.compare("jpeg") || !ext.compare("jpg") ||
+        !ext.compare("ico") || !ext.compare("bmp") || !ext.compare("tif") ||
+        !ext.compare("tiff") || !ext.compare("gif")) {
         return true;
     }
 
