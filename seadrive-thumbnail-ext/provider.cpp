@@ -88,7 +88,7 @@ bool SeadriveThumbnailProvider::isFileCached(const std::string& path)
     return cached;
 }
 
-bool SeadriveThumbnailProvider::isImage (const std::string& path)
+bool SeadriveThumbnailProvider::canGenThumbnail (const std::string& path)
 {
     std::string ext = path.substr(path.find_last_of('.') + 1);
     for (int i = 0; i < ext.size(); i++) {
@@ -96,7 +96,7 @@ bool SeadriveThumbnailProvider::isImage (const std::string& path)
     }
     if (!ext.compare ("png") || !ext.compare("jpeg") || !ext.compare("jpg") ||
         !ext.compare("ico") || !ext.compare("bmp") || !ext.compare("tif") ||
-        !ext.compare("tiff") || !ext.compare("gif")) {
+        !ext.compare("tiff") || !ext.compare("gif") || !ext.compare("pdf")) {
         return true;
     }
 
@@ -124,7 +124,7 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
             return hresult;
         }
         return pThumbProvider->GetThumbnail (cx, phbmp, pdwAlpha);
-    } else if (!isImage (current_file_)) {
+    } else if (!canGenThumbnail (current_file_)) {
         return E_FAIL;
     } else {
         std::string png_path;

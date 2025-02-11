@@ -32,7 +32,7 @@ protected:
     ~SeadriveThumbnailProvider();
 
 private:
-    bool isImage(const std::string& path);
+    bool canGenThumbnail(const std::string& path);
     bool isFileCached(const std::string& path);
     HRESULT extractWithGDI(LPCWSTR pfilePath, HBITMAP *hbmap);
 
