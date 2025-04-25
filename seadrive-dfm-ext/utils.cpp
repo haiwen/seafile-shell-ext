@@ -1,3 +1,7 @@
+#include "utils.h"
+#include <errno.h>
+
+namespace SeaDrivePlugin {
 
 MutexLocker::MutexLocker(pthread_mutex_t *mutex)
 {
@@ -7,17 +11,17 @@ MutexLocker::MutexLocker(pthread_mutex_t *mutex)
 
 MutexLocker::~MutexLocker()
 {
-    phtread_mutex_unlock (mutex_);
+    pthread_mutex_unlock (mutex_);
 }
 
-gssize
+ssize_t
 pipe_write_n(int fd, const void *vptr, size_t n)
 {
     size_t      nleft;
-    gssize     nwritten;
+    ssize_t     nwritten;
     const char  *ptr;
 
-    ptr = vptr;
+    ptr = (char *)vptr;
     nleft = n;
     while (nleft > 0) {
         if ( (nwritten = write(fd, ptr, nleft)) <= 0)
@@ -34,14 +38,14 @@ pipe_write_n(int fd, const void *vptr, size_t n)
     return(n);
 }
 
-gssize
+ssize_t
 pipe_read_n(int fd, void *vptr, size_t n)
 {
     size_t  nleft;
-    gssize nread;
+    ssize_t nread;
     char    *ptr;
 
-    ptr = vptr;
+    ptr = (char *)vptr;
     nleft = n;
     while (nleft > 0) {
         if ( (nread = read(fd, ptr, nleft)) < 0) {
@@ -56,4 +60,6 @@ pipe_read_n(int fd, void *vptr, size_t n)
         ptr   += nread;
     }
     return(n - nleft);      /* return >= 0 */
+}
+
 }

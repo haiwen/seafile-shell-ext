@@ -19,7 +19,7 @@ public:
     void connectDaemon();
 
     bool writeRequest(const std::string& cmd);
-    bool readResponse(std::string *out)
+    bool readResponse(std::string *out);
     std::string formatRequest (std::string name, std::string path) const { return name + "\t" + path; }
 
     std::string getMountDir() const { return mount_dir_; }

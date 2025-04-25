@@ -9,6 +9,7 @@
 #include <sys/un.h>
 #include <cstring>
 #include <iostream>
+#include <memory>
 
 namespace SeaDrivePlugin {
 
@@ -20,7 +21,7 @@ SeaDriveRpcClient::SeaDriveRpcClient()
     : socket_fd_(-1),
       connected_(false)
 {
-    pthread_rwlock_init (&mutex_, NULL);
+    pthread_mutex_init (&mutex_, NULL);
 
     struct passwd *pw = getpwuid(getuid());
     std::string homePath {pw->pw_dir}; 
@@ -75,12 +76,12 @@ void SeaDriveRpcClient::connectDaemon()
 bool SeaDriveRpcClient::writeRequest(const std::string& cmd)
 {
   uint32_t len = cmd.size();
-  if (!pipe_write_n(socket_fd_, &len, sizeof(len))) {
+  if (pipe_write_n(socket_fd_, &len, sizeof(len)) < 0) {
       seaf_ext_log ("Failed to send command: %s", strerror(errno));
       return false;
   }
 
-  if (!pipe_write_n (socket_fd_, cmd.c_str(), len)) {
+  if (pipe_write_n (socket_fd_, cmd.c_str(), len) < 0) {
       seaf_ext_log ("Failed to send command: %s", strerror(errno));
       return false;
   }
@@ -91,7 +92,7 @@ bool SeaDriveRpcClient::writeRequest(const std::string& cmd)
 bool SeaDriveRpcClient::readResponse(std::string *out)
 {
   uint32_t len = 0;
-  if (!pipe_read_n(socket_fd_, &len, sizeof(len))) {
+  if (pipe_read_n(socket_fd_, &len, sizeof(len)) < 0) {
       seaf_ext_log ("Failed to read response length: %s\n", strerror(errno));
       return false;
   }
@@ -106,7 +107,7 @@ bool SeaDriveRpcClient::readResponse(std::string *out)
 
   std::unique_ptr<char[]> buf(new char[len + 1]);
   buf.get()[len] = 0;
-  if (!pipe_read_n (socket_fd_, buf.get(), len)) {
+  if (pipe_read_n (socket_fd_, buf.get(), len) < 0) {
       seaf_ext_log ("Failed to read response message: %s\n", strerror (errno));
       return false;
   }

@@ -70,7 +70,6 @@ DFMExtEmblem SeaDriveEmblemIconPlugin::locationEmblemIcons(const std::string &fi
     }
 
     // Add a elemb icon to the bottom-left corner of the file icon.
-    std::string strBuffer { state};
     if (!strBuffer.empty()) {
         std::vector<DFMExtEmblemIconLayout> layouts;
         DFMExtEmblemIconLayout iconLayout { DFMExtEmblemIconLayout::LocationType::BottomLeft, strBuffer };
@@ -78,7 +77,6 @@ DFMExtEmblem SeaDriveEmblemIconPlugin::locationEmblemIcons(const std::string &fi
         emblem.setEmblem(layouts);
     }
 
-    g_free (state);
     return emblem;
 }
 

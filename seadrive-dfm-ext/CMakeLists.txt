@@ -7,19 +7,17 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DFM_EXTENSION REQUIRED dfm-extension)
 
-pkg_check_modules(LIBSEARPC REQUIRED libsearpc)
-
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS
     "./*.h"
     "./*.cpp"
 )
 
-include_directories(${DFM_EXTENSION_INCLUDE_DIRS} ${GLIB2_INCLUDE_DIRS} ${LIBSEARPC_INCLUDE_DIRS})
+include_directories(${DFM_EXTENSION_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})
 
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC ${DFM_EXTENSION_LIBRARIES} ${GLIB2_LIBRARIES} ${LIBSEARPC_LIBRARIES}
+    PUBLIC ${DFM_EXTENSION_LIBRARIES}
     )
 
 include(GNUInstallDirs)

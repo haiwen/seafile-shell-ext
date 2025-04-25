@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 #include <errno.h>
 #include <cassert>
 #include <iostream>

@@ -1,10 +1,13 @@
 #include <dfm-extension/dfm-extension.h>
 
+#include "rpc-client.h"
 #include "seadrive-menu-plugin.h"
 #include "seadrive-emblemicon-plugin.h"
 
 static DFMEXT::DFMExtMenuPlugin *seadriveMenu { nullptr };
 static DFMEXT::DFMExtEmblemIconPlugin *seadriveEmblemIcon { nullptr };
+
+using namespace SeaDrivePlugin;
 static SeaDriveRpcClient *rpc_client { nullptr };
 
 extern "C" void dfm_extension_initiliaze()
