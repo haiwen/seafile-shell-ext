@@ -1,7 +1,7 @@
 Source: seadrive-dfm-ext
 Section: net
 Priority: extra
-Maintainer: m.eik michalke <meik.michalke@hhu.de>
+Maintainer: Jonathan Xu <jonathan.xu@seafile.com>
 Build-Depends:
     debhelper (>= 7),
     libdfm-extension-dev,
