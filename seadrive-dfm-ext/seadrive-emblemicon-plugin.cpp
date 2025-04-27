@@ -4,6 +4,10 @@
 #include <sys/types.h>
 #include <sys/xattr.h>
 #include <ulimit.h>
+#include <unistd.h>
+#include <error.h>
+#include <string.h>
+#include <sys/stat.h>
 
 namespace SeaDrivePlugin {
 
@@ -54,18 +58,34 @@ DFMExtEmblem SeaDriveEmblemIconPlugin::locationEmblemIcons(const std::string &fi
         return emblem;
     }
 
-    // Set a badge elemb on the file cache state, the state may be 'elemb-seadrive-done', 
-    // 'elemb-seadrive-locked-by-me' or 'elemb-seadrive-locked-by-others'.
+
+    struct stat st;
+    if (stat(filePath.c_str(), &st)!= 0) {
+        seaf_ext_log ("Failed to stat path %s: %s.\n", filePath.c_str(), strerror(errno));
+        return emblem;
+    }
+
+    if (!S_ISREG(st.st_mode)) {
+        return emblem;
+    }
+
+    bool in_repo = rpc_client_->isFileInRepo(filePath.c_str());
+    if (!in_repo) {
+        return emblem;
+    }
+
+    // Set a badge elemb on the file cache state, the state may be 'emblem-seadrive-done', 
+    // 'emblem-seadrive-locked-by-me' or 'emblem-seadrive-locked-by-others'.
     std::string strBuffer;
     int state = rpc_client_->getFileLockState (filePath.c_str());
     if (state == FILE_LOCKED_BY_OTHERS) {
-        strBuffer = "elemb-seadrive-locked-by-others";
+        strBuffer = "emblem-seadrive-locked-by-others";
     } else if (state == FILE_LOCKED_BY_ME_MANUAL || state == FILE_LOCKED_BY_ME_AUTO) {
-        strBuffer = "elemb-seadrive-locked-by-me";
+        strBuffer = "emblem-seadrive-locked-by-me";
     } else {
         bool cached = rpc_client_->isFileCached (filePath.c_str());
         if (cached) {
-            strBuffer = "elemb-seadrive-done";
+            strBuffer = "emblem-seadrive-done";
         }
     }
 

@@ -20,6 +20,7 @@ public:
 
     bool writeRequest(const std::string& cmd);
     bool readResponse(std::string *out);
+    bool sendCommand(const std::string& cmd);
     std::string formatRequest (std::string name, std::string path) const { return name + "\t" + path; }
 
     std::string getMountDir() const { return mount_dir_; }
@@ -33,6 +34,7 @@ public:
     int getUploadLink (const char *path);
     int showFileHistory (const char *path);
     bool isFileCached (const char *path);
+    bool isFileInRepo(const char *path);
 
 private:
     pthread_mutex_t mutex_;

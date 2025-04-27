@@ -26,7 +26,7 @@ SeaDriveRpcClient::SeaDriveRpcClient()
     struct passwd *pw = getpwuid(getuid());
     std::string homePath {pw->pw_dir}; 
     mount_dir_ = homePath + "/SeaDrive";
-    seadrive_dir_ = homePath + "/.seadrive";
+    seadrive_dir_ = homePath + "/.seadrive/";
 }
 
 SeaDriveRpcClient::~SeaDriveRpcClient()
@@ -63,7 +63,7 @@ void SeaDriveRpcClient::connectDaemon()
     strncpy(addr.sun_path, rpc_pipe_path.c_str(), sizeof(addr.sun_path) - 1);
 
     if (::connect(socket_fd_, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        seaf_ext_log ("Failed to connect unix socket: %s\n", strerror(errno));
+        seaf_ext_log ("Failed to connect unix socket %s: %s\n", rpc_pipe_path.c_str(), strerror(errno));
         close(socket_fd_);
         socket_fd_ = -1;
         connected_ = false;
@@ -78,11 +78,13 @@ bool SeaDriveRpcClient::writeRequest(const std::string& cmd)
   uint32_t len = cmd.size();
   if (pipe_write_n(socket_fd_, &len, sizeof(len)) < 0) {
       seaf_ext_log ("Failed to send command: %s", strerror(errno));
+      connected_ = false;
       return false;
   }
 
   if (pipe_write_n (socket_fd_, cmd.c_str(), len) < 0) {
       seaf_ext_log ("Failed to send command: %s", strerror(errno));
+      connected_ = false;
       return false;
   }
 
@@ -94,10 +96,12 @@ bool SeaDriveRpcClient::readResponse(std::string *out)
   uint32_t len = 0;
   if (pipe_read_n(socket_fd_, &len, sizeof(len)) < 0) {
       seaf_ext_log ("Failed to read response length: %s\n", strerror(errno));
+      connected_ = false;
       return false;
   }
 
   if (len == UINT32_MAX) {
+      connected_ = false;
       return false;
   }
 
@@ -109,6 +113,7 @@ bool SeaDriveRpcClient::readResponse(std::string *out)
   buf.get()[len] = 0;
   if (pipe_read_n (socket_fd_, buf.get(), len) < 0) {
       seaf_ext_log ("Failed to read response message: %s\n", strerror (errno));
+      connected_ = false;
       return false;
   }
 
@@ -117,6 +122,18 @@ bool SeaDriveRpcClient::readResponse(std::string *out)
   }
 
   return true;
+}
+
+bool SeaDriveRpcClient::sendCommand(const std::string& cmd)
+{
+    if (!writeRequest(cmd)) {
+        return false;
+    }
+    std::string r;
+    if (!readResponse(&r)) {
+        return false;
+    }
+    return true;
 }
 
 int SeaDriveRpcClient::lockFile(const char *path)
@@ -128,7 +145,7 @@ int SeaDriveRpcClient::lockFile(const char *path)
     }
 
     std::string cmd = formatRequest ("lock-file", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -144,7 +161,7 @@ int SeaDriveRpcClient::unlockFile(const char *path)
     }
 
     std::string cmd = formatRequest ("unlock-file", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -189,7 +206,7 @@ int SeaDriveRpcClient::getShareLink (const char *path)
     }
 
     std::string cmd = formatRequest ("get-share-link", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -205,7 +222,7 @@ int SeaDriveRpcClient::getInternalLink (const char *path)
     }
 
     std::string cmd = formatRequest ("get-internal-link", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -221,7 +238,7 @@ int SeaDriveRpcClient::getUploadLink (const char *path)
     }
 
     std::string cmd = formatRequest ("get-upload-link", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -237,7 +254,7 @@ int SeaDriveRpcClient::showFileHistory (const char *path)
     }
 
     std::string cmd = formatRequest ("show-history", path);
-    if (!writeRequest (cmd)) {
+    if (!sendCommand (cmd)) {
         return -1;
     }
 
@@ -263,6 +280,27 @@ bool SeaDriveRpcClient::isFileCached (const char *path)
     }
 
     return r == "cached";
+}
+
+bool SeaDriveRpcClient::isFileInRepo(const char *path)
+{
+    MutexLocker lock(&mutex_);
+
+    if (!connected_) {
+        return false;
+    }
+
+    std::string cmd = formatRequest ("is-file-in-repo", path);
+    if (!writeRequest (cmd)) {
+        return false;
+    }
+
+    std::string r;
+    if (!readResponse(&r)) {
+        return false;
+    }
+
+    return r == "true";
 }
 
 }

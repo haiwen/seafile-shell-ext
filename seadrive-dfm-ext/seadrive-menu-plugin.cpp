@@ -79,10 +79,7 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
     rootAction->setMenu(menu);
     // Set second-level menu.
     rootAction->registerHovered([this, pathList](DFMExtAction *action) {
-        std::string path = pathList.front().substr(rpc_client_->getMountDir().size());
-        if (!path.empty() && path[0] == '/') {
-            path = path.substr(1);
-        }
+        std::string path = pathList.front();
         if (path.empty()) {
             return;
         }
@@ -94,6 +91,12 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
             seaf_ext_log ("Failed to stat path %s: %s.\n", pathList.front().c_str(), strerror(errno));
             return;
         }
+
+        bool in_repo = rpc_client_->isFileInRepo(path.c_str());
+        if (!in_repo) {
+            return;
+        }
+
         if (S_ISDIR(st.st_mode)) {
             auto uploadLinkAct { proxy_->createAction() };
             uploadLinkAct->setText("获取上传链接");
