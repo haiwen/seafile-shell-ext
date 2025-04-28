@@ -3,11 +3,14 @@
 #include "gui-connection.h"
 #include "seadrive-menu-plugin.h"
 #include "seadrive-emblemicon-plugin.h"
+#include "log.h"
 
 static DFMEXT::DFMExtMenuPlugin *seadriveMenu { nullptr };
 static DFMEXT::DFMExtEmblemIconPlugin *seadriveEmblemIcon { nullptr };
 
 using namespace SeaDrivePlugin;
+const char *log_file_name = "seadrive_ext.log";
+
 static GuiConnection *conn { nullptr };
 
 extern "C" void dfm_extension_initiliaze()

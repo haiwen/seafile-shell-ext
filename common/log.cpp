@@ -1,17 +1,104 @@
-#include "ext-common.h"
+
+#include <string>
+
+#include <pwd.h>
 #include <time.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#ifdef _WIN32
+#include <stdarg.h>
+#endif
 
-#include "ext-utils.h"
 #include "log.h"
 
 namespace {
 
 static FILE *log_fp;
 
+#ifdef _WIN32
+std::string wStringToUtf8(const wchar_t *src)
+{
+    char dst[4096];
+    int len;
+
+    len = WideCharToMultiByte
+        (CP_UTF8,               /* multibyte code page */
+         0,                     /* flags */
+         src,                   /* src */
+         -1,                    /* src len, -1 for all includes \0 */
+         dst,                   /* dst */
+         sizeof(dst),           /* dst buf len */
+         NULL,                  /* default char */
+         NULL);                 /* BOOL flag indicates default char is used */
+
+    if (len <= 0) {
+        return "";
+    }
+
+    return dst;
+}
+
+std::string getHomeDir()
+{
+    static wchar_t *home;
+
+    if (home)
+        return utils::wStringToUtf8 (home);
+
+    wchar_t buf[MAX_PATH] = {'\0'};
+
+    if (!home) {
+        /* Try env variable first. */
+        GetEnvironmentVariableW(L"USERPROFILE", buf, MAX_PATH);
+        if (wcslen(buf) != 0)
+#if defined(_MSC_VER)
+            home = _wcsdup(buf);
+#else
+            home = wcsdup(buf);
+#endif
+    }
+
+    if (!home) {
+        /* No `HOME' ENV; Try user profile */
+        HANDLE hToken = NULL;
+        DWORD len = MAX_PATH;
+        if (OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
+            GetUserProfileDirectoryW(hToken, buf, &len);
+            CloseHandle(hToken);
+            if (wcslen(buf) != 0)
+#if defined(_MSC_VER)
+                home = _wcsdup(buf);
+#else
+                home = wcsdup(buf);
+#endif
+        }
+    }
+
+    if (home) {
+        regulatePath(home);
+    }
+
+    return home ? utils::wStringToUtf8(home):"";
+}
+#else
+std::string getHomeDir()
+{
+    struct passwd *pw = getpwuid(getuid());
+    std::string home {pw->pw_dir}; 
+    if (home.empty())
+        return "";
+
+    return home + "/.seadrive";
+}
+#endif
+
 std::string getLogPath()
 {
-    std::string home = seafile::utils::getHomeDir();
+    std::string home = getHomeDir();
+    printf("home dir: %s\n", home.c_str());
     if (home.empty())
         return "";
 

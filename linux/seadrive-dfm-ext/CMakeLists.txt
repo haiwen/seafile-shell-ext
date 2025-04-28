@@ -10,9 +10,16 @@ pkg_check_modules(DFM_EXTENSION REQUIRED dfm-extension)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS
     "./*.h"
     "./*.cpp"
+    "../../common/*.h"
+    "../../common/*.cpp"
 )
 
 include_directories(${DFM_EXTENSION_INCLUDE_DIRS})
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../common
+)
 
 add_library(${PROJECT_NAME} SHARED ${SRCS})
 
@@ -34,7 +41,6 @@ install(DIRECTORY
   ${CMAKE_SOURCE_DIR}/data/icons/32x32
   ${CMAKE_SOURCE_DIR}/data/icons/48x48
   ${CMAKE_SOURCE_DIR}/data/icons/128x128
-  ${CMAKE_SOURCE_DIR}/data/icons/scalable
   DESTINATION share/icons/hicolor
 )
 

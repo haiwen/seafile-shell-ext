@@ -1,6 +1,8 @@
 #ifndef SEAFILE_CLIENT_EXTENSION_LOG_H
 #define SEAFILE_CLIENT_EXTENSION_LOG_H
 
+extern const char *log_file_name;
+
 void seaf_ext_log_start();
 void seaf_ext_log_stop();
 

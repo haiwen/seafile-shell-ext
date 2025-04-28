@@ -1,0 +1,12 @@
+Package: seadrive-dfm-ext-dbgsym
+Source: seadrive-dfm-ext
+Version: 1.0.0
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Jonathan Xu <jonathan.xu@seafile.com>
+Installed-Size: 41
+Depends: seadrive-dfm-ext (= 1.0.0)
+Section: debug
+Priority: optional
+Description: debug symbols for seadrive-dfm-ext
+Build-Ids: 8ee39131c374049cb4e84a9397ab325808a5604a
