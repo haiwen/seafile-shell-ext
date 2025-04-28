@@ -1,15 +1,18 @@
 
 #include <string>
 
-#include <pwd.h>
 #include <time.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #ifdef _WIN32
+#include <windows.h>
+#include <userenv.h>
 #include <stdarg.h>
+#else
+#include <pwd.h>
+#include <unistd.h>
 #endif
 
 #include "log.h"
@@ -41,12 +44,38 @@ std::string wStringToUtf8(const wchar_t *src)
     return dst;
 }
 
+void regulatePath(wchar_t *p)
+{
+    if (!p)
+        return;
+
+    wchar_t *s = p;
+    /* Use capitalized C/D/E, etc. */
+    if (s[0] >= L'a')
+        s[0] = toupper(s[0]);
+
+    /* Use / instead of \ */
+    while (*s) {
+        if (*s == L'\\')
+            *s = L'/';
+        s++;
+    }
+
+    s--;
+    /* strip trailing white spaces and path seperator */
+    while (isspace(*s) || *s == L'/') {
+        *s = L'\0';
+        s--;
+    }
+}
+
+
 std::string getHomeDir()
 {
     static wchar_t *home;
 
     if (home)
-        return utils::wStringToUtf8 (home);
+        return wStringToUtf8 (home);
 
     wchar_t buf[MAX_PATH] = {'\0'};
 
@@ -81,7 +110,7 @@ std::string getHomeDir()
         regulatePath(home);
     }
 
-    return home ? utils::wStringToUtf8(home):"";
+    return home ? wStringToUtf8(home):"";
 }
 #else
 std::string getHomeDir()
