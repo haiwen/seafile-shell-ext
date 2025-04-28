@@ -13,10 +13,10 @@ namespace SeaDrivePlugin {
 
 USING_DFMEXT_NAMESPACE
 
-SeaDriveEmblemIconPlugin::SeaDriveEmblemIconPlugin(SeaDriveRpcClient *rpc_client)
+SeaDriveEmblemIconPlugin::SeaDriveEmblemIconPlugin(GuiConnection *conn)
     : DFMEXT::DFMExtEmblemIconPlugin()
 {
-    rpc_client_ = rpc_client;
+    conn_ = conn;
 
     registerLocationEmblemIcons([this](const std::string &filePath, int systemIconCount) {
         return locationEmblemIcons(filePath, systemIconCount);
@@ -36,19 +36,19 @@ DFMExtEmblem SeaDriveEmblemIconPlugin::locationEmblemIcons(const std::string &fi
     if (systemIconCount >= 4)
         return emblem;
 
-    if (!rpc_client_->isConnected()) {
-        rpc_client_->connectDaemon(); 
+    if (!conn_->isConnected()) {
+        conn_->connectDaemon(); 
     }
-    if (!rpc_client_->isConnected()) {
+    if (!conn_->isConnected()) {
         return emblem;
     }
 
     // If the file is not in the mount dir, do not set the emblem.
-    if (filePath.rfind(rpc_client_->getMountDir(), 0) != 0) {
+    if (filePath.rfind(conn_->getMountDir(), 0) != 0) {
         return emblem;
     }
 
-    std::string repoPath = filePath.substr(rpc_client_->getMountDir().size());
+    std::string repoPath = filePath.substr(conn_->getMountDir().size());
 
     if (!repoPath.empty() && repoPath[0] == '/') {
         repoPath = repoPath.substr(1);
@@ -69,24 +69,23 @@ DFMExtEmblem SeaDriveEmblemIconPlugin::locationEmblemIcons(const std::string &fi
         return emblem;
     }
 
-    bool in_repo = rpc_client_->isFileInRepo(filePath.c_str());
+    bool in_repo = conn_->isFileInRepo(filePath.c_str());
     if (!in_repo) {
         return emblem;
     }
 
-    // Set a badge elemb on the file cache state, the state may be 'emblem-seadrive-done', 
-    // 'emblem-seadrive-locked-by-me' or 'emblem-seadrive-locked-by-others'.
+    // Set a badge elemb on the file sync status, the status may be 'emblem-seadrive-done', 
+    // 'emblem-seadrive-syncing', 'emblem-seadrive-locked-by-me' or 'emblem-seadrive-locked-by-others'.
     std::string strBuffer;
-    int state = rpc_client_->getFileLockState (filePath.c_str());
-    if (state == FILE_LOCKED_BY_OTHERS) {
+    int status = conn_->getFileStatus (filePath.c_str());
+    if (status == SYNC_STATUS_LOCKED) {
         strBuffer = "emblem-seadrive-locked-by-others";
-    } else if (state == FILE_LOCKED_BY_ME_MANUAL || state == FILE_LOCKED_BY_ME_AUTO) {
+    } else if (status == SYNC_STATUS_LOCKED_BY_ME) {
         strBuffer = "emblem-seadrive-locked-by-me";
-    } else {
-        bool cached = rpc_client_->isFileCached (filePath.c_str());
-        if (cached) {
-            strBuffer = "emblem-seadrive-done";
-        }
+    } else if (status == SYNC_STATUS_SYNCING){
+        strBuffer = "emblem-seadrive-syncing";
+    } else if (status == SYNC_STATUS_SYNCED) {
+        strBuffer = "emblem-seadrive-done";
     }
 
     // Add a elemb icon to the bottom-left corner of the file icon.

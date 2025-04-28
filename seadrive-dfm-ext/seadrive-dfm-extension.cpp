@@ -1,6 +1,6 @@
 #include <dfm-extension/dfm-extension.h>
 
-#include "rpc-client.h"
+#include "gui-connection.h"
 #include "seadrive-menu-plugin.h"
 #include "seadrive-emblemicon-plugin.h"
 
@@ -8,19 +8,19 @@ static DFMEXT::DFMExtMenuPlugin *seadriveMenu { nullptr };
 static DFMEXT::DFMExtEmblemIconPlugin *seadriveEmblemIcon { nullptr };
 
 using namespace SeaDrivePlugin;
-static SeaDriveRpcClient *rpc_client { nullptr };
+static GuiConnection *conn { nullptr };
 
 extern "C" void dfm_extension_initiliaze()
 {
-    rpc_client = new SeaDrivePlugin::SeaDriveRpcClient;
-    seadriveMenu = new SeaDrivePlugin::SeaDriveMenuPlugin(rpc_client);
-    seadriveEmblemIcon = new SeaDrivePlugin::SeaDriveEmblemIconPlugin(rpc_client);
+    conn = new SeaDrivePlugin::GuiConnection;
+    seadriveMenu = new SeaDrivePlugin::SeaDriveMenuPlugin(conn);
+    seadriveEmblemIcon = new SeaDrivePlugin::SeaDriveEmblemIconPlugin(conn);
 }
 
 extern "C" void dfm_extension_shutdown()
 {
-    if (rpc_client) {
-        delete rpc_client;
+    if (conn) {
+        delete conn;
     }
     delete seadriveMenu;
     delete seadriveEmblemIcon;

@@ -1,21 +1,22 @@
-#ifndef SEADRIVERPCCLIENT_H
-#define SEADRIVERPCCLIENT_H
+#ifndef SEADRIVEGUICONNECTION_H
+#define SEADRIVEGUICONNECTION_H
 
 #include <string>
 
-enum LockState {
-      FILE_NOT_LOCKED = 0,
-      FILE_LOCKED_BY_OTHERS,
-      FILE_LOCKED_BY_ME_MANUAL,
-      FILE_LOCKED_BY_ME_AUTO
+enum SyncStatus {
+    SYNC_STATUS_CLOUD,
+    SYNC_STATUS_SYNCING,
+    SYNC_STATUS_SYNCED,
+    SYNC_STATUS_LOCKED,
+    SYNC_STATUS_LOCKED_BY_ME      
 };
 
 namespace SeaDrivePlugin {
 
-class SeaDriveRpcClient {
+class GuiConnection {
 public:
-    SeaDriveRpcClient();
-    ~SeaDriveRpcClient();
+    GuiConnection();
+    ~GuiConnection();
     void connectDaemon();
 
     bool writeRequest(const std::string& cmd);
@@ -28,7 +29,7 @@ public:
 
     int lockFile (const char *path);
     int unlockFile (const char *path);
-    int getFileLockState (const char *path);
+    int getFileStatus (const char *path);
     int getShareLink (const char *path);
     int getInternalLink (const char *path);
     int getUploadLink (const char *path);

@@ -2,14 +2,14 @@
 #define SEADRIVEMENUPLUGIN_H
 
 #include <dfm-extension/menu/dfmextmenuplugin.h>
-#include "rpc-client.h"
+#include "gui-connection.h"
 
 namespace SeaDrivePlugin {
 
 class SeaDriveMenuPlugin : public DFMEXT::DFMExtMenuPlugin
 {
 public:
-    SeaDriveMenuPlugin(SeaDriveRpcClient *rpc_client);
+    SeaDriveMenuPlugin(GuiConnection *conn);
     ~SeaDriveMenuPlugin();
 
     void initialize(DFMEXT::DFMExtMenuProxy *proxy) DFM_FAKE_OVERRIDE;
@@ -21,7 +21,7 @@ public:
     bool buildEmptyAreaMenu(DFMEXT::DFMExtMenu *main, const std::string &currentPath, bool onDesktop) DFM_FAKE_OVERRIDE;
 
 private:
-    SeaDriveRpcClient *rpc_client_;
+    GuiConnection *conn_;
     DFMEXT::DFMExtMenuProxy *proxy_ { nullptr };
 };
 

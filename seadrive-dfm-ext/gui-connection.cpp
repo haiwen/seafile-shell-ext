@@ -1,4 +1,4 @@
-#include "rpc-client.h"
+#include "gui-connection.h"
 #include <unistd.h>
 #include <pwd.h>
 #include "log.h"
@@ -17,7 +17,7 @@ namespace SeaDrivePlugin {
 
 const char *kSeadriveSockName = "seadrive_ext.sock";
 
-SeaDriveRpcClient::SeaDriveRpcClient()
+GuiConnection::GuiConnection()
     : socket_fd_(-1),
       connected_(false)
 {
@@ -29,7 +29,7 @@ SeaDriveRpcClient::SeaDriveRpcClient()
     seadrive_dir_ = homePath + "/.seadrive/";
 }
 
-SeaDriveRpcClient::~SeaDriveRpcClient()
+GuiConnection::~GuiConnection()
 {
     if (socket_fd_ != -1) {
         close (socket_fd_);
@@ -38,7 +38,7 @@ SeaDriveRpcClient::~SeaDriveRpcClient()
       connected_ = false;
 }
 
-void SeaDriveRpcClient::connectDaemon()
+void GuiConnection::connectDaemon()
 {
     MutexLocker lock(&mutex_);
 
@@ -73,7 +73,7 @@ void SeaDriveRpcClient::connectDaemon()
     connected_ = true;
 }
 
-bool SeaDriveRpcClient::writeRequest(const std::string& cmd)
+bool GuiConnection::writeRequest(const std::string& cmd)
 {
   uint32_t len = cmd.size();
   if (pipe_write_n(socket_fd_, &len, sizeof(len)) < 0) {
@@ -91,7 +91,7 @@ bool SeaDriveRpcClient::writeRequest(const std::string& cmd)
   return true;
 }
 
-bool SeaDriveRpcClient::readResponse(std::string *out)
+bool GuiConnection::readResponse(std::string *out)
 {
   uint32_t len = 0;
   if (pipe_read_n(socket_fd_, &len, sizeof(len)) < 0) {
@@ -124,7 +124,7 @@ bool SeaDriveRpcClient::readResponse(std::string *out)
   return true;
 }
 
-bool SeaDriveRpcClient::sendCommand(const std::string& cmd)
+bool GuiConnection::sendCommand(const std::string& cmd)
 {
     if (!writeRequest(cmd)) {
         return false;
@@ -136,7 +136,7 @@ bool SeaDriveRpcClient::sendCommand(const std::string& cmd)
     return true;
 }
 
-int SeaDriveRpcClient::lockFile(const char *path)
+int GuiConnection::lockFile(const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -152,7 +152,7 @@ int SeaDriveRpcClient::lockFile(const char *path)
     return 0;
 }
 
-int SeaDriveRpcClient::unlockFile(const char *path)
+int GuiConnection::unlockFile(const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -168,7 +168,7 @@ int SeaDriveRpcClient::unlockFile(const char *path)
     return 0;
 }
 
-int SeaDriveRpcClient::getFileLockState (const char *path)
+int GuiConnection::getFileStatus (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -186,18 +186,20 @@ int SeaDriveRpcClient::getFileLockState (const char *path)
         return -1;
     }
 
-    if (r == "locked") {
-        return FILE_LOCKED_BY_OTHERS;
+    if (r == "syncing") {
+        return SYNC_STATUS_SYNCING;
+    } else if (r == "synced") {
+        return SYNC_STATUS_SYNCED;
+    } else if (r == "locked") {
+        return SYNC_STATUS_LOCKED;
     } else if (r == "locked_by_me") {
-        return FILE_LOCKED_BY_ME_MANUAL;
-    } else if (r == "locked_auto") {
-        return FILE_LOCKED_BY_ME_AUTO;
+        return SYNC_STATUS_LOCKED_BY_ME;
     }
 
-    return FILE_NOT_LOCKED;
+    return SYNC_STATUS_CLOUD;
 }
 
-int SeaDriveRpcClient::getShareLink (const char *path)
+int GuiConnection::getShareLink (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -213,7 +215,7 @@ int SeaDriveRpcClient::getShareLink (const char *path)
     return 0;
 }
 
-int SeaDriveRpcClient::getInternalLink (const char *path)
+int GuiConnection::getInternalLink (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -229,7 +231,7 @@ int SeaDriveRpcClient::getInternalLink (const char *path)
     return 0;
 }
 
-int SeaDriveRpcClient::getUploadLink (const char *path)
+int GuiConnection::getUploadLink (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -245,7 +247,7 @@ int SeaDriveRpcClient::getUploadLink (const char *path)
     return 0;
 }
 
-int SeaDriveRpcClient::showFileHistory (const char *path)
+int GuiConnection::showFileHistory (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -261,7 +263,7 @@ int SeaDriveRpcClient::showFileHistory (const char *path)
     return 0;
 }
 
-bool SeaDriveRpcClient::isFileCached (const char *path)
+bool GuiConnection::isFileCached (const char *path)
 {
     MutexLocker lock(&mutex_);
 
@@ -282,7 +284,7 @@ bool SeaDriveRpcClient::isFileCached (const char *path)
     return r == "cached";
 }
 
-bool SeaDriveRpcClient::isFileInRepo(const char *path)
+bool GuiConnection::isFileInRepo(const char *path)
 {
     MutexLocker lock(&mutex_);
 

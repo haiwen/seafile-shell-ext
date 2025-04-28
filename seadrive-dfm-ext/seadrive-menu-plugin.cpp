@@ -19,10 +19,10 @@
 namespace SeaDrivePlugin {
 USING_DFMEXT_NAMESPACE
 
-SeaDriveMenuPlugin::SeaDriveMenuPlugin(SeaDriveRpcClient *rpc_client)
+SeaDriveMenuPlugin::SeaDriveMenuPlugin(GuiConnection *conn)
     : DFMEXT::DFMExtMenuPlugin()
 {
-    rpc_client_ = rpc_client;
+    conn_ = conn;
 
     registerInitialize([this](DFMEXT::DFMExtMenuProxy *proxy) {
         initialize(proxy);
@@ -58,15 +58,15 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
         return true;
     }
 
-    if (!rpc_client_->isConnected()) {
-        rpc_client_->connectDaemon(); 
+    if (!conn_->isConnected()) {
+        conn_->connectDaemon(); 
     }
-    if (!rpc_client_->isConnected()) {
+    if (!conn_->isConnected()) {
         return true;
     }
 
     // If the file is not in the mount dir, do not set the menu.
-    if (pathList.front().rfind(rpc_client_->getMountDir(), 0) != 0) {
+    if (pathList.front().rfind(conn_->getMountDir(), 0) != 0) {
         return true;
     }
 
@@ -92,7 +92,7 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
             return;
         }
 
-        bool in_repo = rpc_client_->isFileInRepo(path.c_str());
+        bool in_repo = conn_->isFileInRepo(path.c_str());
         if (!in_repo) {
             return;
         }
@@ -101,25 +101,25 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
             auto uploadLinkAct { proxy_->createAction() };
             uploadLinkAct->setText("获取上传链接");
             uploadLinkAct->registerTriggered([this, path](DFMExtAction *, bool) {
-                rpc_client_->getUploadLink (path.c_str());
+                conn_->getUploadLink (path.c_str());
             });
             action->menu()->addAction(uploadLinkAct);
             return;
         }
 
-        int state = rpc_client_->getFileLockState (path.c_str());
-        if (state == FILE_LOCKED_BY_ME_MANUAL || state == FILE_LOCKED_BY_ME_AUTO) {
+        int status = conn_->getFileStatus (path.c_str());
+        if (status == SYNC_STATUS_LOCKED_BY_ME) {
             auto unlockFileAct { proxy_->createAction() };
             unlockFileAct->setText("解锁该文件");
             unlockFileAct->registerTriggered([this, path](DFMExtAction *, bool) {
-                rpc_client_->unlockFile (path.c_str());
+                conn_->unlockFile (path.c_str());
             });
             action->menu()->addAction(unlockFileAct);
-        } else if (state == FILE_NOT_LOCKED) {
+        } else if (status != SYNC_STATUS_LOCKED) {
             auto lockFileAct { proxy_->createAction() };
             lockFileAct->setText("锁定该文件");
             lockFileAct->registerTriggered([this, path](DFMExtAction *, bool) {
-                rpc_client_->lockFile (path.c_str());
+                conn_->lockFile (path.c_str());
             });
             action->menu()->addAction(lockFileAct);
         }
@@ -127,19 +127,19 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
         auto shareLinkAct { proxy_->createAction() };
         shareLinkAct->setText("获取共享链接");
         shareLinkAct->registerTriggered([this, path](DFMExtAction *, bool) {
-            rpc_client_->getShareLink (path.c_str());
+            conn_->getShareLink (path.c_str());
         });
 
         auto internalLinkAct { proxy_->createAction() };
         internalLinkAct->setText("获取内部链接");
         internalLinkAct->registerTriggered([this, path](DFMExtAction *, bool) {
-            rpc_client_->getInternalLink (path.c_str());
+            conn_->getInternalLink (path.c_str());
         });
 
         auto fileHistoryAct { proxy_->createAction() };
         fileHistoryAct->setText("查看文件历史");
         fileHistoryAct->registerTriggered([this, path](DFMExtAction *, bool) {
-            rpc_client_->showFileHistory (path.c_str());
+            conn_->showFileHistory (path.c_str());
         });
 
         action->menu()->addAction(shareLinkAct);

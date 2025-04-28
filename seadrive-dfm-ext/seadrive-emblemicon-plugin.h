@@ -2,20 +2,20 @@
 #define SEADRIVEEMBLEMICONPLUGIN_H
 
 #include <dfm-extension/emblemicon/dfmextemblemiconplugin.h>
-#include "rpc-client.h"
+#include "gui-connection.h"
 
 namespace SeaDrivePlugin {
 
 class SeaDriveEmblemIconPlugin : public DFMEXT::DFMExtEmblemIconPlugin
 {
 public:
-    SeaDriveEmblemIconPlugin(SeaDriveRpcClient *rpc_client);
+    SeaDriveEmblemIconPlugin(GuiConnection *conn);
     ~SeaDriveEmblemIconPlugin();
 
     DFMEXT::DFMExtEmblem locationEmblemIcons(const std::string &filePath, int systemIconCount) const DFM_FAKE_OVERRIDE;
 
 private:
-    SeaDriveRpcClient *rpc_client_;
+    GuiConnection *conn_;
 };
 
 }   // namespace SeaDrivePlugin
