@@ -49,7 +49,6 @@ void GuiConnection::connectDaemon()
 
     socket_fd_ = socket(AF_UNIX, SOCK_STREAM, 0);
     if (socket_fd_ == -1) {
-        perror("socket");
         seaf_ext_log ("Failed to create unix socket fd: %s\n", strerror(errno));
         connected_ = false;
         return;
@@ -100,6 +99,7 @@ bool GuiConnection::readResponse(std::string *out)
       return false;
   }
 
+  // avoid integer overflow
   if (len == UINT32_MAX) {
       connected_ = false;
       return false;

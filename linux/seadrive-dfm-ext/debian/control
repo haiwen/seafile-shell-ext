@@ -5,9 +5,7 @@ Maintainer: Jonathan Xu <jonathan.xu@seafile.com>
 Build-Depends:
     debhelper (>= 7),
     libdfm-extension-dev,
-    libglib2.0-dev,
     cmake,
-    libsearpc-dev,
 Standards-Version: 3.9.5
 Homepage: https://www.seafile.com
 
