@@ -131,7 +131,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\common;$(SolutionDir)..\seadrive-thumbnail-ext;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\common;$(SolutionDir)..\seadrive-thumbnail-ext;$(SolutionDir);$(SolutionDir)..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DisableSpecificWarnings>4242;4710;4711</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -266,7 +266,7 @@
   <ItemGroup>
     <ClCompile Include="..\common\applet-connection.cpp" />
     <ClCompile Include="Reg.cpp" />
-    <ClCompile Include="..\common\log.cpp" />
+    <ClCompile Include="..\..\common\log.cpp" />
     <ClCompile Include="..\common\ext-utils.cpp" />
     <ClCompile Include="class-factory.cpp" />
     <ClCompile Include="commands.cpp" />
@@ -281,7 +281,7 @@
     <ClInclude Include="..\common\ext-common.h" />
     <ClInclude Include="..\common\ext-config.h" />
     <ClInclude Include="..\common\ext-utils.h" />
-    <ClInclude Include="..\common\log.h" />
+    <ClInclude Include="..\..\common\log.h" />
     <ClInclude Include="class-factory.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="provider.h" />

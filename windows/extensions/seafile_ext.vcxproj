@@ -145,7 +145,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)../common;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)../common;$(ProjectDir);$(ProjectDir)../../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,7 +163,7 @@
     <ClInclude Include="..\common\ext-common.h" />
     <ClInclude Include="..\common\ext-config.h" />
     <ClInclude Include="..\common\ext-utils.h" />
-    <ClInclude Include="..\common\log.h" />
+    <ClInclude Include="..\..\\common\log.h" />
     <ClInclude Include="class-factory.h" />
     <ClInclude Include="commands.h" />
     <ClInclude Include="guids.h" />
@@ -174,7 +174,7 @@
   <ItemGroup>
     <ClCompile Include="..\common\applet-connection.cpp" />
     <ClCompile Include="..\common\ext-utils.cpp" />
-    <ClCompile Include="..\common\log.cpp" />
+    <ClCompile Include="..\..\common\log.cpp" />
     <ClCompile Include="class-factory.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="context-menu.cpp" />
