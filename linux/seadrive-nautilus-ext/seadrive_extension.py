@@ -9,6 +9,7 @@ import urllib.parse
 
 import os
 import socket
+import json
 
 LOCK_TAG="lock-file"
 
@@ -95,6 +96,12 @@ class GuiConnection():
         self._return_transport(transport)
         return ret_str
 
+class Account():
+    def __init__(self, name, signature):
+        self.name = name
+        self.signature = signature
+
+
 home_dir = str(Path.home())
 mount_dir = home_dir + '/SeaDrive'
 
@@ -113,7 +120,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
         file = files[0]
 
         file_path = self.uri_to_local_path(file.get_uri())
-        if not file_path.startswith(mount_dir):
+        if not file_path.startswith(mount_dir) or file_path == mount_dir:
             return None
 
         parent_menu = Nautilus.MenuItem(
@@ -132,7 +139,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
         if file.is_directory():
             upload_item = Nautilus.MenuItem(
                 name="SeaDriveExt::UploadLink",
-                label="get upload link",
+                label="Get Upload Link",
                 tip="Click to get upload link"
             )
             upload_item.connect('activate', self.on_get_upload_link, file_path)
@@ -155,7 +162,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
         if status == "locked_by_me":
             unlock_item = Nautilus.MenuItem(
                 name="SeaDriveExt::UnlockFile",
-                label="unlock file",
+                label="Unlock File",
                 tip="Click to unlock file"
             )
             unlock_item.connect('activate', self.on_unlock_file, file_path, file)
@@ -163,7 +170,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
         elif status  != "locked":
             lock_item = Nautilus.MenuItem(
                 name="SeaDriveExt::LockFile",
-                label="lock file",
+                label="Lock File",
                 tip="Click to lock file"
             )
             lock_item.connect('activate', self.on_lock_file, file_path, file)
@@ -171,7 +178,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
 
         link_item = Nautilus.MenuItem(
             name="SeaDriveExt::ShareLink",
-            label="get share link",
+            label="Get Share Link",
             tip="Click to get share link"
         )
         link_item.connect('activate', self.on_get_share_link, file_path)
@@ -179,7 +186,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
 
         internal_item = Nautilus.MenuItem(
             name="SeaDriveExt::InernalLink",
-            label="get internal link",
+            label="Get Internal Link",
             tip="Click to get internal link"
         )
         internal_item.connect('activate', self.on_get_internal_link, file_path)
@@ -187,7 +194,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
 
         history_item = Nautilus.MenuItem(
             name="SeaDriveExt::FileHistory",
-            label="show file history",
+            label="Show File History",
             tip="Click to show file history"
         )
         history_item.connect('activate', self.on_show_file_history, file_path)
@@ -224,6 +231,7 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
     def on_unlock_file(self, menu_item, file_path, file):
         try:
             self.conn.send("unlock-file", file_path)
+            # Refresh Nautilus by setting extended attributes.
             os.setxattr(file_path, "user.seafile-status", b"unlocked")
         except Exception as e:
             print(f"Failed to unlock file {file_path}: {e}")
@@ -262,4 +270,217 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
                 file_info.add_emblem("emblem-seadrive-done")
         except Exception as e:
             print(f"Failed to get file status for {file_path}: {e}")
+        return
+
+    def get_background_items(self, window, folder):
+        folder_path = self.uri_to_local_path(folder.get_uri())
+        if folder_path != mount_dir:
+            return None
+        seadrive_menu_item = Nautilus.MenuItem(
+            name="SeaDriveExt::SeaDrive",
+            label="SeaDrive",
+            tip="SeaDrive menus"
+        )
+        seadrive_menu = Nautilus.Menu()
+
+        progress_item = Nautilus.MenuItem(
+            name="SeaDriveExt::TransferProgress",
+            label="Transfer Progress",
+            tip="Click to get trnasfer progress"
+        )
+        progress_item.connect('activate', self.on_transfer_progress)
+        seadrive_menu.append_item(progress_item)
+
+        sync_errors_item = Nautilus.MenuItem(
+            name="SeaDriveExt::FileSyncErrors",
+            label="Show File Sync Errors",
+            tip="Click to show file sync errors"
+        )
+        sync_errors_item.connect('activate', self.on_show_file_sync_errors)
+        seadrive_menu.append_item(sync_errors_item)
+
+        enc_libs_item = Nautilus.MenuItem(
+            name="SeaDriveExt::EncLibs",
+            label="Show Encrypted Libraries",
+            tip="Click to show encrypted libraries"
+        )
+        enc_libs_item.connect('activate', self.on_show_enc_libs)
+        seadrive_menu.append_item(enc_libs_item)
+
+        open_logs_folder_item = Nautilus.MenuItem(
+            name="SeaDriveExt::OpenLogsFolder",
+            label="Open Logs Folder",
+            tip="Click to open logs folder"
+        )
+        open_logs_folder_item.connect('activate', self.on_open_logs_folder)
+        seadrive_menu.append_item(open_logs_folder_item)
+
+        settings_item = Nautilus.MenuItem(
+            name="SeaDriveExt::ShowSettings",
+            label="Settings",
+            tip="Click to open settings"
+        )
+        settings_item.connect('activate', self.on_show_settings)
+        seadrive_menu.append_item(settings_item)
+
+        accounts = []
+        try:
+            rsp = self.conn.send("show-accounts", "")
+            if rsp != "":
+                data = json.loads(rsp)
+                for account in data:
+                    accounts.append(Account(account["name"], account["signature"]))
+        except Exception as e:
+            print(f"Failed to get accounts: {e}")
+
+        accounts_menu_item = Nautilus.MenuItem(
+            name="SeaDriveExt::Accounts",
+            label="Accounts",
+            tip="Accounts menus"
+        )
+        accounts_menu = Nautilus.Menu()
+        for account in accounts:
+            account_menu_item = Nautilus.MenuItem(
+                name="SeaDriveExt::Account",
+                label=account.name,
+                tip="Account menus"
+            )
+            accounts_menu.append_item(account_menu_item)
+
+            account_menu = Nautilus.Menu()
+            resync_account_item = Nautilus.MenuItem(
+                name="SeaDriveExt::ResyncAccount",
+                label="Resync",
+                tip="Click to resync account"
+            )
+            resync_account_item.connect('activate', self.on_resync_account, account)
+            account_menu.append_item(resync_account_item)
+
+            delete_account_item = Nautilus.MenuItem(
+                name="SeaDriveExt::DeleteAccount",
+                label="Delete",
+                tip="Click to delete account"
+            )
+            delete_account_item.connect('activate', self.on_delete_account, account)
+            account_menu.append_item(delete_account_item)
+
+            account_menu_item.set_submenu(account_menu)
+
+        add_account_item = Nautilus.MenuItem(
+            name="SeaDriveExt::AddAccount",
+            label="Add an account",
+            tip="Click to add an account"
+        )
+        add_account_item.connect('activate', self.on_add_account)
+
+        #accounts_menu.append_item(add_account_item)
+        #accounts_item.set_submenu(accounts_menu)
+        accounts_menu.append_item(add_account_item)
+        accounts_menu_item.set_submenu(accounts_menu)
+        seadrive_menu.append_item(accounts_menu_item)
+
+        about_item = Nautilus.MenuItem(
+            name="SeaDriveExt::ShowAbout",
+            label="About",
+            tip="Click to open about"
+        )
+        about_item.connect('activate', self.on_show_about)
+        seadrive_menu.append_item(about_item)
+
+        help_item = Nautilus.MenuItem(
+            name="SeaDriveExt::ShowHelp",
+            label="Online Help",
+            tip="Click to open online help"
+        )
+        help_item.connect('activate', self.on_show_help)
+        seadrive_menu.append_item(help_item)
+
+        quit_item = Nautilus.MenuItem(
+            name="SeaDriveExt::Quit",
+            label="Quit",
+            tip="Click to quit seadrive"
+        )
+        quit_item.connect('activate', self.on_quit)
+        seadrive_menu.append_item(quit_item)
+
+        seadrive_menu_item.set_submenu(seadrive_menu)
+
+        return [seadrive_menu_item]
+    
+    def on_transfer_progress(self, menu_item):
+        try:
+            self.conn.send("show-transfer-progress", "")
+        except Exception as e:
+            print(f"Failed to get transfer progress: {e}")
+        return
+
+    def on_show_file_sync_errors(self, menu_item):
+        try:
+            self.conn.send("show-file-sync-errors", "")
+        except Exception as e:
+            print(f"Failed to show file sync errors: {e}")
+        return
+
+    def on_show_enc_libs(self, menu_item):
+        try:
+            self.conn.send("show-encrypted-libraries", "")
+        except Exception as e:
+            print(f"Failed to show encrypted libraries: {e}")
+        return
+
+    def on_open_logs_folder(self, menu_item):
+        try:
+            self.conn.send("open-logs-folder", "")
+        except Exception as e:
+            print(f"Failed to open logs folder: {e}")
+        return
+
+    def on_show_settings (self, menu_item):
+        try:
+            self.conn.send("show-settings", "")
+        except Exception as e:
+            print(f"Failed to show settings: {e}")
+        return
+
+    def on_add_account (self, menu_item):
+        try:
+            self.conn.send("add-account", "")
+        except Exception as e:
+            print(f"Failed to add account: {e}")
+        return
+
+    def on_resync_account (self, menu_item, account):
+        try:
+            self.conn.send("resync-account", account.signature)
+            print(account.name, account.signature)
+        except Exception as e:
+            print(f"Failed to resync account: {e}")
+        return
+
+    def on_delete_account (self, menu_item, account):
+        try:
+            self.conn.send("delete-account", account.signature)
+        except Exception as e:
+            print(f"Failed to delete account: {e}")
+        return
+
+    def on_show_about(self, menu_item):
+        try:
+            self.conn.send("show-about", "")
+        except Exception as e:
+            print(f"Failed to show about: {e}")
+        return
+
+    def on_show_help(self, menu_item):
+        try:
+            self.conn.send("show-help", "")
+        except Exception as e:
+            print(f"Failed to show online help: {e}")
+        return
+
+    def on_quit(self, menu_item):
+        try:
+            self.conn.send("quit", "")
+        except Exception as e:
+            print(f"Failed to quit seadrive: {e}")
         return
