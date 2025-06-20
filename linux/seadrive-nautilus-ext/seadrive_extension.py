@@ -113,7 +113,8 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
         super().__init__()
         self.conn = GuiConnection(seafile_pipe_path)
 
-    def get_file_items(self, window, files):
+    def get_file_items(self, *args):
+        files = args[-1]
         if files == None or len(files) != 1:
             return None
 
@@ -272,7 +273,8 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
             print(f"Failed to get file status for {file_path}: {e}")
         return
 
-    def get_background_items(self, window, folder):
+    def get_background_items(self, *args):
+        folder = args[-1]
         folder_path = self.uri_to_local_path(folder.get_uri())
         if folder_path != mount_dir:
             return None
