@@ -11,8 +11,6 @@ import os
 import socket
 import json
 
-LOCK_TAG="lock-file"
-
 class Transport():
     def __init__(self, pipe_path):
         self.pipe_path = pipe_path
@@ -278,6 +276,8 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
     def on_uncache_file(self, menu_item, file_path, file):
         try:
             self.conn.send("uncache", file_path)
+            # Set a temporary extended attribute to notify Nautilus to update the file status.
+            os.setxattr(file_path, "user.update-file-info", b"true")
         except Exception as e:
             print(f"Failed to uncache file {file_path}: {e}")
 
