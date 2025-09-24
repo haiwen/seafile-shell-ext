@@ -305,4 +305,36 @@ bool GuiConnection::isFileInRepo(const char *path)
     return r == "true";
 }
 
+int GuiConnection::cacheFile (const char *path)
+{
+    MutexLocker lock(&mutex_);
+
+    if (!connected_) {
+        return -1;
+    }
+
+    std::string cmd = formatRequest ("download", path);
+    if (!sendCommand (cmd)) {
+        return -1;
+    }
+
+    return 0;
+}
+
+int GuiConnection::uncacheFile (const char *path)
+{
+    MutexLocker lock(&mutex_);
+
+    if (!connected_) {
+        return -1;
+    }
+
+    std::string cmd = formatRequest ("uncache", path);
+    if (!sendCommand (cmd)) {
+        return -1;
+    }
+
+    return 0;
+}
+
 }

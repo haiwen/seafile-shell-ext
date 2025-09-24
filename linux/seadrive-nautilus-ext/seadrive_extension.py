@@ -158,6 +158,12 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
             print(f"Failed to get file lock state for {file_path}: {e}")
             return None
 
+        try:
+            is_cached = self.conn.send("is-file-cached", file_path)
+        except Exception as e:
+            print(f"Failed to get file cached state for {file_path}: {e}")
+            return None
+
         submenu = Nautilus.Menu()
 
         if status == "locked_by_me":
@@ -176,6 +182,23 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
             )
             lock_item.connect('activate', self.on_lock_file, file_path, file)
             submenu.append_item(lock_item)
+
+        if is_cached == "cached":
+            uncache_item = Nautilus.MenuItem(
+                name="SeaDriveExt::UnCacheFile",
+                label="Remove cache",
+                tip="Click to remove file cache"
+            )
+            uncache_item.connect('activate', self.on_uncache_file, file_path, file)
+            submenu.append_item(uncache_item)
+        else: 
+            cache_item = Nautilus.MenuItem(
+                name="SeaDriveExt::CacheFile",
+                label="Download",
+                tip="Click to download file"
+            )
+            cache_item.connect('activate', self.on_cache_file, file_path, file)
+            submenu.append_item(cache_item)
 
         link_item = Nautilus.MenuItem(
             name="SeaDriveExt::ShareLink",
@@ -245,6 +268,18 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
 
         except Exception as e:
             print(f"Failed to lock file {file_path}: {e}")
+
+    def on_cache_file(self, menu_item, file_path, file):
+        try:
+            self.conn.send("download", file_path)
+        except Exception as e:
+            print(f"Failed to download file {file_path}: {e}")
+
+    def on_uncache_file(self, menu_item, file_path, file):
+        try:
+            self.conn.send("uncache", file_path)
+        except Exception as e:
+            print(f"Failed to uncache file {file_path}: {e}")
 
     def uri_to_local_path(self, uri):
         if uri.startswith('file://'):
