@@ -36,6 +36,8 @@ public:
     int showFileHistory (const char *path);
     bool isFileCached (const char *path);
     bool isFileInRepo(const char *path);
+    int cacheFile(const char *path);
+    int uncacheFile(const char *path);
 
 private:
     pthread_mutex_t mutex_;

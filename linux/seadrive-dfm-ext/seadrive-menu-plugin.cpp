@@ -124,6 +124,23 @@ bool SeaDriveMenuPlugin::buildNormalMenu(DFMExtMenu *main, const std::string &cu
             action->menu()->addAction(lockFileAct);
         }
 
+        bool cached = conn_->isFileCached(path.c_str());
+        if (cached) {
+            auto uncacheFileAct { proxy_->createAction() };
+            uncacheFileAct->setText("删除缓存");
+            uncacheFileAct->registerTriggered([this, path](DFMExtAction *, bool) {
+                conn_->uncacheFile (path.c_str());
+            });
+            action->menu()->addAction(uncacheFileAct);
+        } else {
+            auto cacheFileAct { proxy_->createAction() };
+            cacheFileAct->setText("下载");
+            cacheFileAct->registerTriggered([this, path](DFMExtAction *, bool) {
+                conn_->cacheFile (path.c_str());
+            });
+            action->menu()->addAction(cacheFileAct);
+        }
+
         auto shareLinkAct { proxy_->createAction() };
         shareLinkAct->setText("获取共享链接");
         shareLinkAct->registerTriggered([this, path](DFMExtAction *, bool) {
