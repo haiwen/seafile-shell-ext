@@ -146,6 +146,22 @@ class SeaDriveFileExtension(GObject.GObject, Nautilus.MenuProvider, Nautilus.Inf
             submenu = Nautilus.Menu()
             submenu.append_item(upload_item)
 
+            uncache_item = Nautilus.MenuItem(
+                name="SeaDriveExt::UnCacheFile",
+                label="Remove cache",
+                tip="Click to remove file cache"
+            )
+            uncache_item.connect('activate', self.on_uncache_file, file_path, file)
+            submenu.append_item(uncache_item)
+
+            cache_item = Nautilus.MenuItem(
+                name="SeaDriveExt::CacheFile",
+                label="Download",
+                tip="Click to download file"
+            )
+            cache_item.connect('activate', self.on_cache_file, file_path, file)
+            submenu.append_item(cache_item)
+
             parent_menu.set_submenu(submenu)
 
             return [parent_menu]
