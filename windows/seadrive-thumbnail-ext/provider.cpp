@@ -1,6 +1,7 @@
 #include "ext-common.h"
 #include "provider.h"
 #include <Shlwapi.h>
+#include <ShlObj.h>
 #include <Wincrypt.h>   // For CryptStringToBinary.
 #include <msxml6.h>
 #include <shobjidl.h>   //For IShellItemImageFactory
@@ -135,7 +136,31 @@ IFACEMETHODIMP SeadriveThumbnailProvider::GetThumbnail(UINT cx, HBITMAP *phbmp,
         }
 
         wchar_t *png_path_w = utils::utf8ToWString(png_path);
-        hresult = extractWithGDI(png_path_w, phbmp);
+        if (!png_path_w) {
+            return E_OUTOFMEMORY;
+        }
+
+        std::wstring resolved(png_path_w);
+
+        if (PathIsRelativeW(resolved.c_str())) {
+            PWSTR profile = NULL;
+            HRESULT hr = SHGetKnownFolderPath(
+                FOLDERID_Profile, 0, NULL, &profile);
+
+            if (FAILED(hr)) {
+                free(png_path_w);
+                return hr;
+            }
+
+            resolved = std::wstring(profile) + L"\\" + resolved;
+            CoTaskMemFree(profile);
+        }
+
+        hresult = extractWithGDI(resolved.c_str(), phbmp);
+
+        if (SUCCEEDED(hresult)) {
+            *pdwAlpha = WTSAT_ARGB;
+        }
         free (png_path_w);
         return hresult;
     }
@@ -167,10 +192,56 @@ HRESULT SeadriveThumbnailProvider::extractWithGDI(LPCWSTR wpath, HBITMAP* hbmap)
         return E_FAIL;
     }
 
-    gdi::Status status = bitmap->GetHBITMAP(NULL, hbmap);
-    if (status != gdi::Ok) {
+    if (bitmap->GetLastStatus() != gdi::Ok ||
+        bitmap->GetWidth() == 0 || bitmap->GetHeight() == 0) {
         return E_FAIL;
     }
 
+    const UINT width = bitmap->GetWidth();
+    const UINT height = bitmap->GetHeight();
+
+    gdi::Bitmap argb(width, height, PixelFormat32bppARGB);
+    if (argb.GetLastStatus() != gdi::Ok) {
+        return E_FAIL;
+    }
+
+    gdi::Graphics graphics(&argb);
+    if (graphics.Clear(gdi::Color(0, 0, 0, 0)) != gdi::Ok ||
+        graphics.DrawImage(bitmap.get(), 0, 0) != gdi::Ok) {
+        return E_FAIL;
+    }
+
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bi.bmiHeader.biWidth = width;
+    bi.bmiHeader.biHeight = -(LONG)height;
+    bi.bmiHeader.biPlanes = 1;
+    bi.bmiHeader.biBitCount = 32;
+    bi.bmiHeader.biCompression = BI_RGB;
+
+    void* bits = NULL;
+    *hbmap = CreateDIBSection(NULL, &bi, DIB_RGB_COLORS, &bits, NULL, 0);
+    if (!*hbmap) {
+        return E_FAIL;
+    }
+
+    gdi::Rect rect(0, 0, width, height);
+    gdi::BitmapData data = {};
+    gdi::Status status = argb.LockBits(
+        &rect, gdi::ImageLockModeRead, PixelFormat32bppARGB, &data);
+
+    if (status != gdi::Ok) {
+        DeleteObject(*hbmap);
+        *hbmap = NULL;
+        return E_FAIL;
+    }
+
+    for (UINT y = 0; y < height; ++y) {
+        memcpy((BYTE*)bits + y * width * 4,
+               (BYTE*)data.Scan0 + y * data.Stride,
+               width * 4);
+    }
+
+    argb.UnlockBits(&data);
     return S_OK;
 }
